@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>워크플로 1 — 캐릭터 제어 영상 만들기 | 찰스의 AI 스튜디오</title>
+  <meta name="theme-color" content="#ef4444">
+  <link rel="icon" href="favicon.ico" />
+  <meta name="color-scheme" content="dark">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <input id="menu-toggle" type="checkbox" hidden>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="logo"><a href="index.html" style="text-decoration:none">찰스의 AI 스튜디오</a></div>
+      <ul class="nav-links" aria-label="주요 메뉴">
+        <li><a href="index.html#flow">워크플로</a></li>
+        <li><a href="index.html#modules">커리큘럼</a></li>
+        <li><a href="index.html#samples">샘플</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+      </ul>
+      <div class="right-actions">
+        <div id="userChip" class="user-chip" aria-live="polite">
+          <img id="userAvatar" alt="">
+          <span id="userName">사용자</span>
+        </div>
+        <button id="loginBtn" class="btn-sm primary" type="button">로그인</button>
+        <button id="logoutBtn" class="btn-sm hidden" type="button">로그아웃</button>
+        <button class="hamb" aria-label="메뉴 열기/닫기"
+                onclick="document.body.classList.toggle('menu-open')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M3 6h18M3 12h18M3 18h18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="nav-links-mobile wrap" aria-label="모바일 메뉴" style="display:none"></nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <h1>워크플로 1 — <span style="color:var(--brand)">캐릭터 제어 영상</span> 만들기</h1>
+      <p class="lead">AI로 만든 캐릭터를 움직이고, 말하고, 표정을 제어해 쇼츠/롱폼으로 완성.</p>
+      <div class="cta">
+        <a class="btn btn-ghost" href="index.html#flow">← 메인으로</a>
+        <a class="btn btn-primary" href="#steps">제작 단계 보기</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <h2>예시 영상</h2>
+      <p class="sub">완성 결과물 레퍼런스</p>
+      <div class="video">
+        <iframe src="https://www.youtube.com/embed/sYYQxGDWxZ0" title="캐릭터 제어 예시" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </section>
+
+    <section id="steps">
+      <h2>제작 단계</h2>
+      <p class="sub">아이디어 → 캐릭터 시트 → 구동 → 립싱크/보이스 → 편집</p>
+      <div class="grid g-3">
+        <article class="card">
+          <h3>1) 캐릭터 디자인</h3>
+          <p class="sub">첫 프레임 스틸샷 → 이미지 모델(MJ 등)로 스타일 고정</p>
+          <ul>
+            <li>기준 포즈/의상/표정 확정</li>
+            <li>해상도와 비율(9:16/16:9) 먼저 결정</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>2) 모션/컨트롤</h3>
+          <p class="sub">포즈 트래킹 or 비디오 리타게팅 도구로 움직임 이식</p>
+          <ul>
+            <li>레퍼런스 동작 준비 (짧고 확실한 제스처)</li>
+            <li>전/후 포즈 일치 체크</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>3) 보이스/립싱크</h3>
+          <p class="sub">TTS/보이스 생성 + 립싱크 툴로 입모양 정합</p>
+          <ul>
+            <li>대사 스크립트 먼저 확정</li>
+            <li>자막 싱크는 0.1~0.2초 여유</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>4) 합성/클린업</h3>
+          <p class="sub">배경/앞경 레이어링, 경계 디테일 보정</p>
+          <ul>
+            <li>헤어/손가락 경계 확인</li>
+            <li>컬러 매칭(피부톤/광원)</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>5) 편집/출력</h3>
+          <p class="sub">훅-메시지-콜투액션 구조로 컷 편집</p>
+          <ul>
+            <li>쇼츠: 0–3초 강한 훅</li>
+            <li>롱폼: 챕터/하이라이트 마커</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>다운로드/자료</h2>
+      <div class="grid g-2">
+        <a class="card btn btn-ghost" href="https://github.com/charlesaistudio/AI-studio" target="_blank" rel="noopener">GitHub 템플릿</a>
+        <a class="card btn btn-primary" href="index.html#apply">수강/문의</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap" style="padding:24px 0; color:var(--muted); border-top:1px solid var(--line);">
+    © 2025
