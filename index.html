@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>찰스의 AI 스튜디오 — 유튜브용 AI 영상 제작 교육</title>
+  <link rel="icon" href="favicon.ico" />
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    :root{
+      --bg:#ffffff; --fg:#0f172a; --muted:#64748b; --line:#e5e7eb;
+      --brand:#ef4444; /* YouTube red 느낌 */
+      --accent:#111827; --pill:#f3f4f6;
+      --radius:16px; --shadow:0 12px 30px rgba(0,0,0,.08);
+    }
+    @media (prefers-color-scheme: dark){
+      :root{ --bg:#0b0f17; --fg:#e5e7eb; --muted:#93a3b8; --line:#1f2937; --pill:#111827; --accent:#e5e7eb; --shadow:0 12px 30px rgba(0,0,0,.35);}
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; background:var(--bg); color:var(--fg);
+      font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans KR", Roboto, Helvetica, Arial, sans-serif;
+      line-height:1.7;
+    }
+    a{color:inherit}
+
+    /* Nav */
+    .nav{ position:sticky; top:0; z-index:50; backdrop-filter:saturate(1.2) blur(10px);
+      border-bottom:1px solid var(--line); background:color-mix(in oklab, var(--bg) 80%, transparent); }
+    .nav-inner{ max-width:1100px; margin:0 auto; padding:14px 20px; display:flex; gap:14px; align-items:center }
+    .logo{ display:flex; gap:10px; align-items:center; font-weight:900; letter-spacing:.2px }
+    .badge{ display:inline-flex; align-items:center; gap:6px; font-size:12px; padding:6px 10px; border-radius:999px; background:var(--pill); border:1px solid var(--line) }
+    .nav-links{ margin-left:auto; display:flex; gap:14px }
+    .nav-links a{ text-decoration:none; color:var(--muted); font-weight:700 }
+    .nav-links a:hover{ color:var(--fg) }
+
+    /* Layout helpers */
+    .wrap{ max-width:1100px; margin:0 auto; padding:0 20px }
+    .grid{ display:grid; gap:18px }
+    .g-3{ grid-template-columns:repeat(3,1fr) }
+    .g-2{ grid-template-columns:repeat(2,1fr) }
+    @media (max-width: 960px){ .g-3{ grid-template-columns:1fr 1fr } }
+    @media (max-width: 640px){ .g-3,.g-2{ grid-template-columns:1fr } }
+
+    /* Hero */
+    .hero{ padding:60px 0 36px; background:
+      radial-gradient(1000px 600px at 10% -10%, #ffe8e8 0%, transparent 60%),
+      radial-gradient(1000px 600px at 90% 0%, #e8f1ff 0%, transparent 60%); }
+    .hero h1{ font-size:36px; line-height:1.2; margin:8px 0 10px }
+    .lead{ color:var(--muted); max-width:720px }
+    .cta{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px }
+    .btn{
+      display:inline-flex; align-items:center; gap:10px; text-decoration:none; font-weight:900;
+      padding:12px 18px; border-radius:12px; border:1px solid var(--line); box-shadow:var(--shadow); transition:.15s transform, .15s box-shadow
+    }
+    .btn:hover{ transform:translateY(-1px) }
+    .btn-primary{ background:var(--brand); color:#fff; border-color:var(--brand) }
+    .btn-ghost{ background:var(--pill) }
+
+    /* Section */
+    section{ padding:42px 0 }
+    section h2{ font-size:24px; margin:0 0 8px }
+    .sub{ color:var(--muted); margin:0 0 14px }
+
+    /* Cards */
+    .card{
+      background:var(--bg); border:1px solid var(--line); border-radius:var(--radius); padding:18px;
+      box-shadow:var(--shadow); transition:.15s transform, .15s box-shadow, .15s border-color
+    }
+    .card:hover{ transform:translateY(-2px) }
+
+    .pill{ display:inline-flex; align-items:center; gap:8px; background:var(--pill); border:1px solid var(--line);
+      padding:8px 12px; border-radius:999px; font-size:13px; color:var(--muted) }
+    .icon{ width:18px; height:18px; display:inline-block; border-radius:4px; background:var(--brand) }
+
+    /* Pipeline */
+    .flow{ display:grid; gap:12px; grid-template-columns:1fr 40px 1fr 40px 1fr 40px 1fr }
+    @media (max-width: 960px){ .flow{ grid-template-columns:1fr; } .arrow{ display:none } }
+    .stage{ padding:16px; border:1px dashed var(--line); border-radius:14px; background:var(--pill) }
+    .stage h3{ margin:0 0 8px; font-size:16px }
+    .stage p{ margin:0; color:var(--muted); font-size:14px }
+    .arrow{ display:flex; align-items:center; justify-content:center; color:var(--muted) }
+
+    /* Video */
+    .video{
+      position:relative; width:100%; aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:#000; border:1px solid var(--line)
+    }
+    .video iframe{ position:absolute; inset:0; width:100%; height:100%; border:0 }
+
+    /* FAQ */
+    details{ border:1px solid var(--line); border-radius:12px; padding:12px 14px; background:var(--pill) }
+    summary{ cursor:pointer; font-weight:800 }
+    details+details{ margin-top:10px }
+
+    footer{ border-top:1px solid var(--line); color:var(--muted); text-align:center; padding:40px 0 60px }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="nav-inner">
+      <div class="logo">
+        <span class="icon"></span> 찰스의 AI 스튜디오
+        <span class="badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2"/></svg> 유튜브용 AI 영상</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#flow">워크플로</a>
+        <a href="#modules">커리큘럼</a>
+        <a href="#samples">샘플</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="wrap">
+      <h1>유튜브에서 통하는 <span style="color:var(--brand)">AI 영상 제작</span> A→Z</h1>
+      <p class="lead">아이디어 → 대본 → 음악/이미지 → 애니메이션 → 편집/자막 → 업로드까지.  
+        실제 업로드 가능한 완성본을 목표로, 필요한 툴과 템플릿을 한 번에 잡아줍니다.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#modules">커리큘럼 보기</a>
+        <a class="btn btn-ghost" href="https://github.com/charlesaistudio/AI-studio" target="_blank" rel="noopener">GitHub 자료</a>
+      </div>
+      <div class="cta">
+        <span class="pill">필요 툴: ChatGPT · Suno · Midjourney · Runway/Veo · CapCut</span>
+        <span class="pill">출력: Shorts / 16:9 / 2.39:1</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- FLOW -->
+    <section id="flow">
+      <h2>핵심 워크플로</h2>
+      <p class="sub">짧고 명확한 파이프라인 — 각 단계별 템플릿 제공</p>
+
+      <div class="flow">
+        <div class="stage card">
+          <h3>1. 콘셉트 & 대본</h3>
+          <p>후킹 인트로/메인/콜투액션 구조, 15/30/60초 버전.</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="stage card">
+          <h3>2. 소스 생성</h3>
+          <p>음악(Suno) · 이미지(Midjourney) · 영상(Runway/Veo) 생성.</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="stage card">
+          <h3>3. 편집 & 모션</h3>
+          <p>CapCut 템플릿, 자막/비트싱크, 전환/효과 최소 레시피.</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="stage card">
+          <h3>4. 업로드 & 최적화</h3>
+          <p>제목/태그/설명/챕터, 썸네일 체크리스트, A/B 테스트.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULES -->
+    <section id="modules">
+      <h2>커리큘럼</h2>
+      <p class="sub">툴 별로 “딱 필요한 것만” 빠르게 익히기</p>
+      <div class="grid g-3">
+        <article class="card">
+          <h3>ChatGPT — 아이디어/대본</h3>
+          <p class="sub">니치 리서치 → 훅/스크립트 템플릿 → 숏폼 스토리보드.</p>
+          <ul>
+            <li>Hook 5종 템플릿 (문제제기/반전/숫자/비교/ASMR)</li>
+            <li>30초/60초 스크립트 자동 생성 프롬프트</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Suno — 음악/효과음</h3>
+          <p class="sub">장르/무드/구성 프롬프트, 보컬/인스트루먼트 버전.</p>
+          <ul>
+            <li>인트로 5초 스팅/브레이크 만들기</li>
+            <li>루프 가능한 BGM 추출</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Midjourney — 이미지/썸네일</h3>
+          <p class="sub">아이캐치, 브랜드 컬러, 문자 선명도, 16:9/9:16 가이드.</p>
+          <ul>
+            <li>썸네일 3안 빠른 탐색 프롬프트</li>
+            <li>CI 색상/폰트 고정 프리셋</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Runway/Veo — 영상 생성</h3>
+          <p class="sub">씬 스크립트 5초 단위, 카메라 워크/라이트 프롬프트.</p>
+          <ul>
+            <li>쇼츠용 9:16 안정 프리셋</li>
+            <li>컷 간 시각 톤 일치시키기</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>CapCut — 편집/자막/사운드</h3>
+          <p class="sub">L컷/제이컷, 오토캡션 정리, LUT/텍스트 프리셋.</p>
+          <ul>
+            <li>비트 싱크 단축키/리듬 패턴</li>
+            <li>템플릿 프로젝트 제공(.cptemplate)</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>업로드 & 분석</h3>
+          <p class="sub">메타데이터/해시태그/챕터, CTR·Retention 기본 해석.</p>
+          <ul>
+            <li>제목/설명/태그 자동 생성 폼</li>
+            <li>초반 1시간 체크리스트</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- SAMPLES -->
+    <section id="samples">
+      <h2>샘플 & 데모</h2>
+      <p class="sub">임베드 자리 — 곽의 영상 링크로 교체만 하면 됨</p>
+      <div class="grid g-2">
+        <div class="card">
+          <div class="video">
+            <!-- 곽 영상 링크로 교체 -->
+            <iframe src="https://www.youtube.com/embed/JBWGcqoOY2k"
+              title="AI 영상 샘플" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+          </div>
+          <p class="sub" style="margin-top:10px">샘플: 60초 교육형 쇼츠</p>
+        </div>
+        <div class="card">
+          <div class="video">
+            <!-- 곽 영상 링크로 교체 -->
+            <iframe src="https://www.youtube.com/embed/CQedWk7ijj4"
+              title="AI 영상 샘플 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+          </div>
+          <p class="sub" style="margin-top:10px">샘플: 튜토리얼 컷다운</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHECKLIST -->
+    <section id="check">
+      <h2>준비물 체크리스트</h2>
+      <p class="sub">수업 시작 전에 계정과 파일만 준비하면 바로 제작 가능</p>
+      <div class="grid g-3">
+        <div class="card">
+          <h3>필수 계정</h3>
+          <ul>
+            <li>Google 계정 + YouTube 채널</li>
+            <li>Suno / Midjourney / Runway(Veo) 중 2개 이상</li>
+            <li>CapCut(PC) 설치</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>템플릿 패키지</h3>
+          <ul>
+            <li>스크립트 템플릿(.txt/.md)</li>
+            <li>CapCut 프리셋(.cptemplate)</li>
+            <li>썸네일 PSD/PNG 프레임</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>권장 사양</h3>
+          <ul>
+            <li>메모리 16GB 이상</li>
+            <li>저장공간 10GB 여유</li>
+            <li>안정된 업로드 네트워크</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <h2>FAQ</h2>
+      <details>
+        <summary>완전 초보도 가능한가요?</summary>
+        <p>가능. 툴 설치/가입부터 시작해서, 템플릿에 값만 채워도 결과물이 나오도록 구성했어.</p>
+      </details>
+      <details>
+        <summary>저작권/라이선스는 어떻게 다루나요?</summary>
+        <p>각 툴의 이용 약관과 유튜브 가이드라인을 함께 점검하고, 상업적 사용시 주의할 포인트를 체크리스트로 제공해.</p>
+      </details>
+      <details>
+        <summary>Shorts와 16:9 중 뭘 먼저 만들까요?</summary>
+        <p>리텐션 학습엔 Shorts가 빠르고, 브랜드 서사는 16:9가 유리. 수업에선 두 포맷을 병행해 템플릿을 나눠 제공해.</p>
+      </details>
+    </section>
+
+    <!-- CTA -->
+    <section id="apply">
+      <h2>수강 신청 / 문의</h2>
+      <p class="sub">단체/기업 맞춤 클래스도 가능합니다.</p>
+      <div class="grid g-2">
+        <a class="card btn btn-primary" href="mailto:charlesaistudio01@gmail.com">이메일로 문의하기</a>
+        <a class="card btn btn-ghost" href="https://github.com/charlesaistudio/AI-studio" target="_blank" rel="noopener">자료 저장소 보기</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 찰스의 AI 스튜디오 · YouTube AI Video Course
+  </footer>
+</body>
+</html>
