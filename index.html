@@ -6,7 +6,7 @@
   <title>찰스의 AI 스튜디오 — 유튜브용 AI 영상 제작 교육</title>
   <meta name="theme-color" content="#ef4444">
   <link rel="icon" href="favicon.ico" />
-  <meta name="color-scheme" content="light dark" />
+  <meta name="color-scheme" content="dark">
   <style>
     /* ========== Reset & Base ========== */
     *, *::before, *::after { box-sizing: border-box; }
@@ -36,13 +36,8 @@
 
     a { color: inherit; text-underline-offset: .2em; }
     img, video { max-width: 100%; height: auto; }
-
     :focus-visible { outline: 3px solid color-mix(in oklab, var(--brand), white 20%); outline-offset: 2px; border-radius: 8px; }
-
-    @media (prefers-reduced-motion: reduce) {
-      * { animation: none !important; transition: none !important; }
-      html { scroll-behavior: auto; }
-    }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } html { scroll-behavior: auto; } }
 
     /* ========== Layout Helpers ========== */
     .wrap { width: var(--wrap); margin-inline: auto; }
@@ -66,11 +61,22 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 12px;
     }
+    .logo { font-weight: 800; letter-spacing: .2px; }
     .nav-links { list-style: none; display: flex; gap: 16px; margin: 0; padding: 0; }
-    .nav-links a { text-decoration: none; font-weight: 700; color: var(--muted); padding: 10px 12px; }
-    .nav-links a:hover { color: var(--fg); }
+    .nav-links a { text-decoration: none; font-weight: 700; color: var(--muted); padding: 10px 12px; border-radius: 10px; }
+    .nav-links a:hover { color: var(--fg); background: rgba(255,255,255,.04); }
+
+    .right-actions { display:flex; align-items:center; gap:10px; }
+    .user-chip { display:none; align-items:center; gap:8px; padding:6px 10px; border:1px solid var(--line); background:var(--pill); border-radius:999px; font-size:14px; color:var(--muted);}
+    .user-chip img{ width:22px; height:22px; border-radius:50%; object-fit:cover; }
+    .btn-sm { padding:8px 12px; border:1px solid var(--line); border-radius:10px; background:var(--pill); font-weight:800; cursor:pointer; }
+    .btn-sm.primary { background: var(--brand); color:#fff; border-color:var(--brand); }
+    .btn-sm:disabled{opacity:.6; cursor:not-allowed;}
+
     .hamb { background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; }
+
     @media (max-width: 768px) {
       .nav-links {
         position: absolute; top: 60px; left: 0; right: 0;
@@ -86,8 +92,8 @@
     .hero {
       padding: clamp(28px, 7vw, 60px) 0 24px;
       background:
-        radial-gradient(900px 540px at 12% -10%, #ffe8e8 0%, transparent 60%),
-        radial-gradient(900px 540px at 88% 0%, #e8f1ff 0%, transparent 60%);
+        radial-gradient(900px 540px at 12% -10%, rgba(239,68,68,.14) 0%, transparent 60%),
+        radial-gradient(900px 540px at 88% 0%, rgba(52,82,255,.14) 0%, transparent 60%);
     }
     .hero h1 { font-size: clamp(22px, 6vw, 36px); line-height: 1.2; margin: 6px 0 8px; }
     .lead { color: var(--muted); max-width: 72ch; font-size: clamp(14px, 3.6vw, 16px); }
@@ -143,12 +149,15 @@
     }
     .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
-    /* ========== FAQ ========== */
-    details { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: var(--pill); }
-    summary { cursor: pointer; font-weight: 800; }
-    details + details { margin-top: 10px; }
-
-    footer { border-top: 1px solid var(--line); color: var(--muted); text-align: center; padding: 36px 0 max(60px, env(safe-area-inset-bottom)); }
+    /* ========== Auth Modal ========== */
+    .modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:100; }
+    .modal{ width:min(480px, 92vw); background:var(--pill); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); padding:18px; }
+    .modal h3{ margin:0 0 8px; }
+    .modal p{ margin:0 0 14px; color:var(--muted); }
+    .modal .actions{ display:flex; flex-direction:column; gap:10px; }
+    .modal .close{ position:absolute; right:16px; top:12px; background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer; }
+    .login-error{ color:#ff6b6b; font-size:14px; display:none; }
+    .hidden{ display:none !important; }
   </style>
 </head>
 <body>
@@ -158,26 +167,51 @@
   <nav class="nav">
     <div class="nav-inner">
       <div class="logo">찰스의 AI 스튜디오</div>
-      <button class="hamb" aria-label="메뉴 열기/닫기" onclick="document.body.classList.toggle('menu-open')">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <path d="M3 6h18M3 12h18M3 18h18"/>
-        </svg>
-      </button>
+
       <ul class="nav-links">
         <li><a href="#flow">워크플로</a></li>
         <li><a href="#modules">커리큘럼</a></li>
         <li><a href="#samples">샘플</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
+
+      <div class="right-actions">
+        <div id="userChip" class="user-chip">
+          <img id="userAvatar" alt="">
+          <span id="userName">사용자</span>
+        </div>
+        <button id="loginBtn" class="btn-sm primary">로그인</button>
+        <button id="logoutBtn" class="btn-sm hidden">로그아웃</button>
+
+        <button class="hamb" aria-label="메뉴 열기/닫기" onclick="document.body.classList.toggle('menu-open')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M3 6h18M3 12h18M3 18h18"/>
+          </svg>
+        </button>
+      </div>
     </div>
   </nav>
 
+  <!-- 모바일 드롭다운 메뉴 -->
   <nav class="nav-links mobile wrap" aria-label="모바일 메뉴">
     <a href="#flow" onclick="document.getElementById('menu-toggle').checked=false">워크플로</a>
     <a href="#modules" onclick="document.getElementById('menu-toggle').checked=false">커리큘럼</a>
     <a href="#samples" onclick="document.getElementById('menu-toggle').checked=false">샘플</a>
     <a href="#faq" onclick="document.getElementById('menu-toggle').checked=false">FAQ</a>
   </nav>
+
+  <!-- 로그인 모달 -->
+  <div id="authModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="modal">
+      <button class="close" aria-label="닫기" onclick="toggleAuth(false)">✕</button>
+      <h3 id="authTitle">로그인</h3>
+      <p>Google 계정으로 안전하게 로그인합니다.</p>
+      <div class="actions">
+        <button id="googleSignIn" class="btn-sm primary">Google로 로그인</button>
+        <span id="authError" class="login-error"></span>
+      </div>
+    </div>
+  </div>
 
   <header class="hero">
     <div class="wrap">
@@ -253,5 +287,91 @@
   <footer>
     © 2025 찰스의 AI 스튜디오 · YouTube AI Video Course
   </footer>
+
+  <!-- 우상단 같은 곳 -->
+<div id="userChip" class="user-chip" style="display:none">
+  <span id="userName">사용자</span>
+</div>
+<button id="loginBtn" class="btn-sm primary">로그인</button>
+<button id="logoutBtn" class="btn-sm" style="display:none">로그아웃</button>
+
+
+  <!-- Firebase SDKs (v10 modular CDN) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { 
+    getAuth, GoogleAuthProvider, 
+    signInWithPopup, signOut, onAuthStateChanged,
+    setPersistence, browserLocalPersistence, signInWithRedirect
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD_IuakhMe5Qofl85JDdAJ1IUu1eaN5paU",
+    authDomain: "charles01-9eee3.firebaseapp.com",
+    projectId: "charles01-9eee3",
+    storageBucket: "charles01-9eee3.firebasestorage.app",
+    messagingSenderId: "409220278869",
+    appId: "1:409220278869:web:ebbab45579e96c22a482dc",
+    // measurementId: "G-ZXT8WJ8KY0" // Analytics 안 쓰면 생략해도 됨
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    const loginBtn  = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const userChip  = document.getElementById("userChip");
+    const userName  = document.getElementById("userName");
+
+    // 세션 유지 (브라우저 재접속 시에도 로그인 유지)
+    await setPersistence(auth, browserLocalPersistence);
+
+    if (loginBtn) {
+      loginBtn.addEventListener("click", async () => {
+        try {
+          await signInWithPopup(auth, provider);
+        } catch (err) {
+          // iOS Safari 등 팝업 차단 시 리다이렉트 폴백
+          if (err?.code === 'auth/popup-blocked' || err?.message?.includes('popup')) {
+            await signInWithRedirect(auth, provider);
+          } else {
+            alert("로그인 실패: " + (err.code || err.message || err));
+          }
+        }
+      });
+    }
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", async () => {
+        try {
+          await signOut(auth);
+        } catch (err) {
+          alert("로그아웃 실패: " + (err.code || err.message || err));
+        }
+      });
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const name = user.displayName || user.email || "사용자";
+        if (userName) userName.textContent = name;
+        if (userChip) userChip.style.display = "inline-flex";
+        if (loginBtn) loginBtn.style.display = "none";
+        if (logoutBtn) logoutBtn.style.display = "inline-block";
+        console.log("로그인 성공:", name);
+      } else {
+        if (userChip) userChip.style.display = "none";
+        if (loginBtn) loginBtn.style.display = "inline-block";
+        if (logoutBtn) logoutBtn.style.display = "none";
+        console.log("로그아웃 상태");
+      }
+    });
+  });
+</script>
+
+
+
 </body>
 </html>
