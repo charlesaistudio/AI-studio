@@ -1,23 +1,214 @@
 <!doctype html>
 <html lang="ko">
+<style>
+  /* Drawer/Backdrop: 기본은 무조건 닫힘 */
+  #toolsBackdrop{
+    position:fixed; inset:0; background:rgba(0,0,0,.55);
+    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:1000;
+  }
+  #toolsDrawer{
+    position:fixed; top:0; right:0; height:100%; width:min(360px,88vw);
+    background:var(--pill); border-left:1px solid var(--line); box-shadow:var(--shadow);
+    transform:translateX(100%) !important; visibility:hidden !important; opacity:0 !important; pointer-events:none !important;
+    z-index:1001; display:flex; flex-direction:column; transition:transform .25s ease, opacity .2s ease;
+  }
+  .tools-open #toolsBackdrop{ opacity:1; pointer-events:auto; }
+  .tools-open #toolsDrawer{
+    transform:translateX(0) !important; visibility:visible !important; opacity:1 !important; pointer-events:auto !important;
+  }
+
+/* =========================
+   Tools Drawer – Polish Pack
+   붙여넣기 위치: styles.css 맨 아래
+   ========================= */
+
+/* 유리(Glass) 느낌 + 살짝 넓게 */
+#toolsDrawer{
+  width: min(420px, 92vw);                /* 살짝 더 넓게 */
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)) ,
+    var(--pill);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-left: 1px solid color-mix(in oklab, var(--line), white 5%);
+  box-shadow: 0 10px 40px rgba(0,0,0,.45);
+}
+
+/* 열렸을 때 살짝 튀어나오는 느낌(시각 강조) */
+.tools-open #toolsDrawer{
+  box-shadow: 0 16px 56px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.02);
+}
+
+/* 헤더: 그라디언트 + 스티키 */
+#toolsDrawer .tools-header{
+  position: sticky; top: 0; z-index: 2;
+  padding: 16px 18px;
+  border-bottom: 1px solid color-mix(in oklab, var(--line), white 8%);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+}
+#toolsDrawer .tools-header h3{
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: .2px;
+  color: color-mix(in oklab, var(--fg), white 12%);
+  display: inline-flex; align-items: center; gap: 10px;
+}
+#toolsDrawer .tools-header h3::before{
+  content: "";
+  width: 8px; height: 8px; border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--brand));
+  box-shadow: 0 0 14px color-mix(in oklab, var(--brand), white 40%);
+}
+#toolsDrawer .tools-close{
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 18px; line-height: 1;
+  padding: 6px 8px; border-radius: 8px;
+  transition: background .15s ease, transform .1s ease, color .2s ease;
+}
+#toolsDrawer .tools-close:hover{
+  background: rgba(255,255,255,.06);
+  color: var(--fg);
+}
+#toolsDrawer .tools-close:active{
+  transform: scale(.96);
+}
+
+/* 내용 영역 + 스크롤바 커스텀 */
+#toolsDrawer .tools-body{
+  padding: 12px;
+  display: flex; flex-direction: column; gap: 10px;
+  overflow: auto;
+}
+#toolsDrawer .tools-body::-webkit-scrollbar{ width: 10px; }
+#toolsDrawer .tools-body::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.02); border-radius: 999px;
+}
+#toolsDrawer .tools-body::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.15); border-radius: 999px;
+  border: 2px solid transparent; background-clip: padding-box;
+}
+#toolsDrawer .tools-body{ scrollbar-color: rgba(255,255,255,.2) transparent; }
+
+/* 링크 카드: 입체감 + 호버 인터랙션 */
+#toolsDrawer .tool-item{
+  position: relative;
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 14px 14px 14px 18px;
+  border-radius: 14px;
+  color: var(--fg); text-decoration: none;
+  border: 1px solid color-mix(in oklab, var(--line), white 6%);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)),
+    var(--bg);
+  box-shadow: 0 6px 18px rgba(0,0,0,.28);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .2s ease;
+}
+#toolsDrawer .tool-item:hover{
+  transform: translateY(-2px);
+  border-color: color-mix(in oklab, var(--line), white 16%);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)),
+    var(--bg);
+  box-shadow: 0 12px 28px rgba(0,0,0,.36);
+}
+#toolsDrawer .tool-item:active{
+  transform: translateY(0);
+}
+
+/* 좌측 포커스 바(브랜드 그라디언트) */
+#toolsDrawer .tool-item::before{
+  content: "";
+  position: absolute; left: 8px; top: 10px; bottom: 10px; width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--brand), color-mix(in oklab, var(--brand), white 30%));
+  opacity: .0; transition: opacity .2s ease;
+}
+#toolsDrawer .tool-item:hover::before,
+#toolsDrawer .tool-item:focus-visible::before{ opacity: 1; }
+
+/* 텍스트 스타일 */
+#toolsDrawer .tool-name{
+  font-weight: 900;
+  letter-spacing: .15px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+#toolsDrawer .tool-name::after{
+  content: "↗";
+  font-weight: 700; font-size: .9em;
+  opacity: .5; transform: translateY(-1px);
+}
+#toolsDrawer .tool-desc{
+  font-size: 12px; color: var(--muted);
+}
+
+/* 첫/마지막 아이템 강조(옵션) */
+#toolsDrawer .tool-item:first-child{
+  border-color: color-mix(in oklab, var(--brand), var(--line) 60%);
+  background:
+    linear-gradient(180deg, rgba(239,68,68,.08), rgba(239,68,68,.02)),
+    var(--bg);
+}
+#toolsDrawer .tool-item:last-child{
+  background:
+    linear-gradient(180deg, rgba(120,144,255,.06), rgba(120,144,255,.02)),
+    var(--bg);
+}
+
+/* 포커스 접근성 */
+#toolsDrawer .tool-item:focus-visible{
+  outline: 3px solid color-mix(in oklab, var(--brand), white 25%);
+  outline-offset: 2px;
+}
+
+/* 백드롭 살짝 부드럽게 */
+#toolsBackdrop{
+  background: radial-gradient(1200px 800px at 100% 0%, rgba(239,68,68,.20), transparent 52%) ,
+              rgba(0,0,0,.55);
+  transition: opacity .22s ease;
+}
+
+/* 모션 민감도 */
+@media (prefers-reduced-motion: reduce){
+  #toolsDrawer, #toolsBackdrop,
+  #toolsDrawer .tool-item { transition: none !important; }
+}
+
+</style>
+
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>찰스의 AI 스튜디오 </title>
-  <meta name="theme-color" content="#ef4444">
+  <title>찰스의 AI 스튜디오</title>
+  <meta name="theme-color" content="#ef4444" />
   <link rel="icon" href="favicon.ico" />
-  <meta name="color-scheme" content="dark">
-  <link rel="stylesheet" href="assets/styles.css">
+  <meta name="color-scheme" content="dark" />
+
+  <!-- GitHub Pages 프로젝트 경로 고정 -->
+  <base href="https://charlesaistudio.github.io/AI-studio/">
+
+  <!-- FOUC/우선순위 핫픽스: 드로어는 기본 숨김 -->
+  <style>
+    .tools-backdrop{opacity:0;pointer-events:none}
+    .tools-drawer{
+      transform:translateX(100%)!important;visibility:hidden;opacity:0;pointer-events:none
+    }
+    .tools-open .tools-backdrop{opacity:1;pointer-events:auto}
+    .tools-open .tools-drawer{
+      transform:translateX(0)!important;visibility:visible;opacity:1;pointer-events:auto
+    }
+  </style>
+
+  <link rel="stylesheet" href="assets/styles.css?v=7" />
 </head>
 <body>
-  <!-- 모바일 메뉴 토글 상태 -->
-  <input id="menu-toggle" type="checkbox" hidden>
-
   <!-- NAV -->
   <nav class="nav">
     <div class="nav-inner">
       <div class="logo">찰스의 AI 스튜디오</div>
 
+      <!-- 상단 가로 메뉴 -->
       <ul class="nav-links" aria-label="주요 메뉴">
         <li><a href="#flow">워크플로</a></li>
         <li><a href="#faq">FAQ</a></li>
@@ -26,16 +217,21 @@
       <div class="right-actions">
         <!-- 유저 칩 (로그인 시에만 표시) -->
         <div id="userChip" class="user-chip" aria-live="polite">
-          <img id="userAvatar" alt="">
+          <img id="userAvatar" alt="" />
           <span id="userName">사용자</span>
         </div>
+
         <!-- 로그인/로그아웃 버튼 -->
         <button id="loginBtn" class="btn-sm primary" type="button">로그인</button>
         <button id="logoutBtn" class="btn-sm hidden" type="button">로그아웃</button>
 
-        <!-- 햄버거 버튼 -->
-        <button class="hamb" aria-label="메뉴 열기/닫기"
-                onclick="document.body.classList.toggle('menu-open')">
+        <!-- 햄버거: 우측 사이드 패널 토글 -->
+        <button
+          id="toolsBtn"
+          class="hamb"
+          aria-label="툴 메뉴 열기/닫기"
+          aria-expanded="false"
+          aria-controls="toolsDrawer">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round">
             <path d="M3 6h18M3 12h18M3 18h18"/>
@@ -45,14 +241,45 @@
     </div>
   </nav>
 
-  <!-- 모바일 드롭다운 메뉴 -->
-  <nav class="nav-links wrap" aria-label="모바일 메뉴">
-    <a href="#flow" onclick="document.body.classList.remove('menu-open')">워크플로</a>
-    <a href="#faq" onclick="document.body.classList.remove('menu-open')">FAQ</a>
-  </nav>
+  <!-- 우측 슬라이드 패널 (툴 링크) -->
+<div id="toolsBackdrop" class="tools-backdrop" aria-hidden="true"></div>
+<aside id="toolsDrawer" class="tools-drawer" role="dialog" aria-modal="true" aria-label="빠른 툴 링크">
+  <header class="tools-header">
+    <h3>AI툴</h3>
+    <button class="tools-close" aria-label="닫기" onclick="closeTools()">✕</button>
+  </header>
 
-  <!-- 로그인 모달 -->
-  <div id="authModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <nav class="tools-body">
+    <a class="tool-item" href="https://chat.openai.com" target="_blank" rel="noopener" onclick="closeTools()">
+      <span class="tool-name">🤖 ChatGPT</span>
+      <span class="tool-desc">대본/아이디어 생성</span>
+    </a>
+
+    <a class="tool-item" href="https://www.midjourney.com/" target="_blank" rel="noopener" onclick="closeTools()">
+      <span class="tool-name">🎨 Midjourney</span>
+      <span class="tool-desc">이미지 생성</span>
+    </a>
+
+    <a class="tool-item" href="https://suno.com" target="_blank" rel="noopener" onclick="closeTools()">
+      <span class="tool-name">🎵 Suno</span>
+      <span class="tool-desc">음악 생성</span>
+    </a>
+
+    <a class="tool-item" href="https://labs.google/fx/tools/videofx" target="_blank" rel="noopener" onclick="closeTools()">
+      <span class="tool-name">🎬 Veo 3</span>
+      <span class="tool-desc">영상 생성 (Google VideoFX)</span>
+    </a>
+
+    <a class="tool-item" href="https://klingai.com/" target="_blank" rel="noopener" onclick="closeTools()">
+      <span class="tool-name">🚀 Kling</span>
+      <span class="tool-desc">고품질 비디오 생성</span>
+    </a>
+  </nav>
+</aside>
+
+
+  <!-- 로그인 모달 (기본 숨김) -->
+  <div id="authModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="authTitle" style="display:none">
     <div class="modal">
       <button class="close" aria-label="닫기" onclick="toggleAuth(false)">✕</button>
       <h3 id="authTitle">로그인</h3>
@@ -68,7 +295,10 @@
   <header class="hero">
     <div class="wrap">
       <h1>유튜브에서 통하는 <span style="color:var(--brand)">AI 영상 제작</span> A→Z</h1>
-      <p class="lead">아이디어 → 대본 → 음악/이미지 → 애니메이션 → 편집/자막 → 업로드까지.<br>실제 업로드 가능한 완성본을 목표로, 필요한 툴과 템플릿을 한 번에 잡아줍니다.</p>
+      <p class="lead">
+        아이디어 → 대본 → 음악/이미지 → 애니메이션 → 편집/자막 → 업로드까지.<br>
+        실제 업로드 가능한 완성본을 목표로, 필요한 툴과 템플릿을 한 번에 잡아줍니다.
+      </p>
       <div class="cta">
         <a class="btn btn-primary" href="#flow">워크플로 보기</a>
         <a class="btn btn-ghost" href="https://github.com/charlesaistudio/AI-studio" target="_blank" rel="noopener">GitHub 자료</a>
@@ -79,87 +309,112 @@
   <!-- MAIN -->
   <main class="wrap">
     <section id="flow" class="wf-carousel">
-  <div class="wf-head">
-    <h2>핵심 워크플로</h2>
-    <div class="wf-controls">
-      <button class="wf-prev" aria-label="이전 워크플로">
-        ‹
-      </button>
-      <button class="wf-next" aria-label="다음 워크플로">
-        ›
-      </button>
-    </div>
-  </div>
-  <p class="sub">실전 예제로 배우는 프로젝트</p>
-
-  <div class="wf-viewport" tabindex="0" aria-label="워크플로 슬라이더">
-    <div class="wf-track">
-
-      <!-- 카드 1: 전체가 링크 -->
-      <a href="workflow-1.html" class="wf-card card" style="text-decoration:none; color:inherit">
-        <div class="wf-pill">Workflow 1</div>
-        <h3>캐릭터 제어 영상 만들기</h3>
-        <p class="sub">AI로 만든 캐릭터를 움직이고, 말하고, 표정까지 제어하는 법.</p>
-        <div class="video">
-          <iframe src="https://www.youtube.com/embed/sYYQxGDWxZ0"
-            title="캐릭터 제어 예시" allowfullscreen loading="lazy"></iframe>
+      <div class="wf-head">
+        <h2>핵심 워크플로</h2>
+        <div class="wf-controls">
+          <button class="wf-prev" aria-label="이전 워크플로">‹</button>
+          <button class="wf-next" aria-label="다음 워크플로">›</button>
         </div>
-      </a>
+      </div>
+      <p class="sub">실전 예제로 배우는 프로젝트</p>
 
-      <article class="wf-card card">
-        <div class="wf-pill">Workflow 2</div>
-        <h3>뮤직비디오 만들기</h3>
-        <p class="sub">Suno 음악에 맞춰 이미지/클립을 이어서 뮤비 제작.</p>
-        <div class="video">
-          <iframe src="https://www.youtube.com/embed/CQedWk7ijj4"
-            title="뮤직비디오 예시" allowfullscreen loading="lazy"></iframe>
+      <div class="wf-viewport" tabindex="0" aria-label="워크플로 슬라이더">
+        <div class="wf-track">
+          <!-- 카드 1: 전체가 링크 -->
+          <a href="workflow-1.html" class="wf-card card is-link" style="text-decoration:none; color:inherit">
+            <div class="wf-pill">Workflow 1</div>
+            <h3>캐릭터 제어 영상 만들기</h3>
+            <p class="sub">AI로 만든 캐릭터를 움직이고, 말하고, 표정까지 제어하는 법.</p>
+            <div class="video">
+              <iframe
+                src="https://www.youtube.com/embed/sYYQxGDWxZ0"
+                title="캐릭터 제어 예시"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+          </a>
+
+          <article class="wf-card card">
+            <div class="wf-pill">Workflow 2</div>
+            <h3>뮤직비디오 만들기</h3>
+            <p class="sub">Suno 음악에 맞춰 이미지/클립을 이어서 뮤비 제작.</p>
+            <div class="video">
+              <iframe
+                src="https://www.youtube.com/embed/CQedWk7ijj4"
+                title="뮤직비디오 예시"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+          </article>
+
+          <article class="wf-card card">
+            <div class="wf-pill">Workflow 3</div>
+            <h3>지브리풍 영상 만들기</h3>
+            <p class="sub">Midjourney + Runway/Veo로 지브리 감성 애니메이션.</p>
+            <div class="video">
+              <iframe
+                src="https://www.youtube.com/embed/ScMzIvxBSi4"
+                title="지브리풍 예시"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+          </article>
         </div>
-      </article>
 
-      <article class="wf-card card">
-        <div class="wf-pill">Workflow 3</div>
-        <h3>지브리풍 영상 만들기</h3>
-        <p class="sub">Midjourney + Runway/Veo로 지브리 감성 애니메이션.</p>
-        <div class="video">
-          <iframe src="https://www.youtube.com/embed/ScMzIvxBSi4"
-            title="지브리풍 예시" allowfullscreen loading="lazy"></iframe>
-        </div>
-      </article>
-
-      <!-- 필요하면 더 추가 가능 -->
-
-    </div>
-    <!-- 양옆 그라디언트 -->
-    <div class="wf-fade wf-fade-left" aria-hidden="true"></div>
-    <div class="wf-fade wf-fade-right" aria-hidden="true"></div>
-  </div>
-</section>
-
+        <!-- 양옆 그라디언트 -->
+        <div class="wf-fade wf-fade-left" aria-hidden="true"></div>
+        <div class="wf-fade wf-fade-right" aria-hidden="true"></div>
+      </div>
+    </section>
 
     <section id="check">
       <h2>준비물 체크리스트</h2>
       <p class="sub">수업 시작 전에 계정과 파일만 준비하면 바로 제작 가능</p>
       <div class="grid g-3">
-        <div class="card"><h3>필수 계정</h3><ul><li>Google 계정 + YouTube 채널</li><li>Suno / Midjourney / Runway(Veo) 중 2개 이상</li><li>CapCut(PC) 설치</li></ul></div>
-        <div class="card"><h3>템플릿 패키지</h3><ul><li>스크립트 템플릿(.txt/.md)</li><li>CapCut 프리셋(.cptemplate)</li><li>썸네일 PSD/PNG 프레임</li></ul></div>
-        <div class="card"><h3>권장 사양</h3><ul><li>메모리 16GB 이상</li><li>저장공간 10GB 여유</li><li>안정된 업로드 네트워크</li></ul></div>
+        <div class="card">
+          <h3>필수 계정</h3>
+          <ul>
+            <li>Google 계정 + YouTube 채널</li>
+            <li>Suno / Midjourney / Runway(Veo) 중 2개 이상</li>
+            <li>CapCut(PC) 설치</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>템플릿 패키지</h3>
+          <ul>
+            <li>스크립트 템플릿(.txt/.md)</li>
+            <li>CapCut 프리셋(.cptemplate)</li>
+            <li>썸네일 PSD/PNG 프레임</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>권장 사양</h3>
+          <ul>
+            <li>메모리 16GB 이상</li>
+            <li>저장공간 10GB 여유</li>
+            <li>안정된 업로드 네트워크</li>
+          </ul>
+        </div>
       </div>
     </section>
 
     <section id="faq">
       <h2>FAQ</h2>
-      <details><summary>완전 초보도 가능한가요?</summary><p>가능. 툴 설치/가입부터 시작해서, 템플릿에 값만 채워도 결과물이 나오도록 구성했어.</p></details>
-      <details><summary>저작권/라이선스는 어떻게 다루나요?</summary><p>각 툴의 이용 약관과 유튜브 가이드라인을 함께 점검하고, 상업적 사용시 주의할 포인트를 체크리스트로 제공해.</p></details>
-      <details><summary>Shorts와 16:9 중 뭘 먼저 만들까요?</summary><p>리텐션 학습엔 Shorts가 빠르고, 브랜드 서사는 16:9가 유리. 수업에선 두 포맷을 병행해 템플릿을 나눠 제공해.</p></details>
-    </section>
-
-    <section id="apply">
-      <h2>수강 신청 / 문의</h2>
-      <p class="sub">단체/기업 맞춤 클래스도 가능합니다.</p>
-      <div class="grid g-2">
-        <a class="card btn btn-primary" href="mailto:charlesaistudio01@gmail.com">이메일로 문의하기</a>
-        <a class="card btn btn-ghost" href="https://github.com/charlesaistudio/AI-studio" target="_blank" rel="noopener">자료 저장소 보기</a>
-      </div>
+      <details>
+        <summary>완전 초보도 가능한가요?</summary>
+        <p>가능. 툴 설치/가입부터 시작해서, 템플릿에 값만 채워도 결과물이 나오도록 구성했어.</p>
+      </details>
+      <details>
+        <summary>저작권/라이선스는 어떻게 다루나요?</summary>
+        <p>각 툴의 이용 약관과 유튜브 가이드라인을 함께 점검하고, 상업적 사용시 주의할 포인트를 체크리스트로 제공해.</p>
+      </details>
+      <details>
+        <summary>Shorts와 16:9 중 뭘 먼저 만들까요?</summary>
+        <p>리텐션 학습엔 Shorts가 빠르고, 브랜드 서사는 16:9가 유리. 수업에선 두 포맷을 병행해 템플릿을 나눠 제공해.</p>
+      </details>
     </section>
   </main>
 
@@ -167,7 +422,47 @@
     © 2025 찰스의 AI 스튜디오 · YouTube AI Video Course
   </footer>
 
+  <!-- 스크립트 -->
   <script type="module" src="assets/slider.js"></script>
-  <script type="module" src="assets/app.js"></script>
+  <script type="module" src="assets/app.js?v=2"></script>
+
+  <!-- 우측 패널 토글/닫기 (유일한 스크립트) -->
+  <script>
+  (function () {
+    const btn = document.getElementById('toolsBtn');
+    const drawer = document.getElementById('toolsDrawer');
+    const backdrop = document.getElementById('toolsBackdrop');
+
+    if (!btn || !drawer || !backdrop) return;
+
+    function openTools() {
+      document.body.classList.add('tools-open');
+      btn.setAttribute('aria-expanded', 'true');
+      setTimeout(() => drawer.querySelector('a.tool-item')?.focus(), 0);
+    }
+    function closeTools() {
+      document.body.classList.remove('tools-open');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.focus();
+    }
+    function toggleTools() {
+      if (document.body.classList.contains('tools-open')) closeTools();
+      else openTools();
+    }
+
+    // 이벤트 바인딩(유일)
+    btn.addEventListener('click', toggleTools);
+    backdrop.addEventListener('click', closeTools);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeTools(); });
+    document.addEventListener('click', (e) => {
+      if (!document.body.classList.contains('tools-open')) return;
+      if (drawer.contains(e.target) || btn.contains(e.target)) return;
+      closeTools();
+    });
+
+    // close 버튼/툴 링크에서 씀
+    window.closeTools = closeTools;
+  })();
+  </script>
 </body>
 </html>

@@ -56,7 +56,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyD_IuakhMe5Qofl85JDdAJ1IUu1eaN5paU",
   authDomain: "charles01-9eee3.firebaseapp.com",
   projectId: "charles01-9eee3",
-  // storageBucket는 보통 appspot.com 형식. 현재 기능 안쓰면 일단 주석처리해도 됨.
+  // storageBucket는 보통 appspot.com 형식. 현재 기능 안쓰면 일단 주석처리 가능.
   // storageBucket: "charles01-9eee3.appspot.com",
   messagingSenderId: "409220278869",
   appId: "1:409220278869:web:ebbab45579e96c22a482dc",
@@ -69,14 +69,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // 퍼시스턴스: 실패해도 앱이 멈추지 않게 try/catch
+    // 퍼시스턴스: 실패해도 앱이 멈추지 않게
     try {
       await setPersistence(auth, browserLocalPersistence);
     } catch (e) {
       console.warn("persistence 실패:", e?.code || e?.message || e);
     }
 
-    // 리다이렉트 결과: 실패/없음 모두 무시 가능
+    // 리다이렉트 결과: 실패/없음 모두 무시
     try {
       await getRedirectResult(auth);
     } catch (e) {
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
   } catch (fatal) {
-    // 어떤 이유로든 초기화 실패해도 UI가 '멈춘' 상태로 남지 않게 처리
+    // 실패해도 UI가 '멈춘' 상태로 남지 않게
     console.error("Firebase 초기화 실패:", fatal);
     showLoggedOutUI();
     toggleAuth(false);
