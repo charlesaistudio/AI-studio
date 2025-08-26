@@ -105,6 +105,30 @@ section h2 { font-size: clamp(18px, 4.8vw, 24px); margin: 0 0 8px; }
   padding: clamp(14px, 4.2vw, 18px); box-shadow: var(--shadow);
   transition: .15s transform, .15s box-shadow, .15s border-color;
 }
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px; /* 왼쪽 넓게, 오른쪽은 300px */
+  gap: 24px;
+  align-items: center;
+}
+
+.hero-photo img {
+  width: 100%;
+  max-width: 280px;
+  border-radius: 16px;     /* 둥근 모서리 */
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  object-fit: cover;
+}
+@media (max-width: 768px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .hero-photo {
+    margin-top: 20px;
+  }
+}
+
 
 /* ========== Video (쇼츠 전용) ========== */
 .video {
