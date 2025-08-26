@@ -4,42 +4,104 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>워크플로 1 — 캐릭터 제어 완벽 가이드 | 찰스의 AI 스튜디오</title>
-  <meta name="theme-color" content="#ef4444">
+  <meta name="theme-color" content="#ef4444" />
   <link rel="icon" href="favicon.ico" />
-  <meta name="color-scheme" content="dark">
-  <link rel="stylesheet" href="assets/styles.css">
-  <link rel="stylesheet" href="assets/edu.css">
+  <meta name="color-scheme" content="dark" />
+
+  <!-- GitHub Pages 프로젝트 경로 고정 (index와 동일) -->
+  <base href="https://charlesaistudio.github.io/AI-studio/">
+
+  <!-- FOUC/우선순위 핫픽스: 드로어는 기본 숨김 (index와 동일) -->
+  <style>
+    .tools-backdrop{opacity:0;pointer-events:none}
+    .tools-drawer{
+      transform:translateX(100%)!important;visibility:hidden;opacity:0;pointer-events:none
+    }
+    .tools-open .tools-backdrop{opacity:1;pointer-events:auto}
+    .tools-open .tools-drawer{
+      transform:translateX(0)!important;visibility:visible;opacity:1;pointer-events:auto
+    }
+  </style>
+
+  <link rel="stylesheet" href="assets/styles.css?v=7" />
+  <link rel="stylesheet" href="assets/edu.css" />
 </head>
+
 <body>
   <input id="menu-toggle" type="checkbox" hidden>
 
   <!-- 상단 네비 -->
   <nav class="nav">
-    <div class="nav-inner">
-      <div class="logo"><a href="index.html" style="text-decoration:none">찰스의 AI 스튜디오</a></div>
-      <ul class="nav-links" aria-label="주요 메뉴">
-        <li><a href="index.html#flow">워크플로</a></li>
-        <li><a href="index.html#modules">커리큘럼</a></li>
-        <li><a href="index.html#samples">샘플</a></li>
-        <li><a href="index.html#faq">FAQ</a></li>
-      </ul>
-      <div class="right-actions">
-        <div id="userChip" class="user-chip" aria-live="polite">
-          <img id="userAvatar" alt="">
-          <span id="userName">사용자</span>
-        </div>
-        <button id="loginBtn" class="btn-sm primary" type="button">로그인</button>
-        <button id="logoutBtn" class="btn-sm hidden" type="button">로그아웃</button>
-        <button class="hamb" aria-label="메뉴 열기/닫기"
-                onclick="document.body.classList.toggle('menu-open')">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <path d="M3 6h18M3 12h18M3 18h18"/>
-          </svg>
-        </button>
+  <div class="nav-inner">
+    <div class="logo"><a href="index.html" style="text-decoration:none">찰스의 AI 스튜디오</a></div>
+
+    <!-- 상단 가로 메뉴: 메인 섹션은 index로 연결 -->
+    <ul class="nav-links" aria-label="주요 메뉴">
+      <li><a href="index.html#flow">워크플로</a></li>
+      <li><a href="index.html#faq">FAQ</a></li>
+    </ul>
+
+    <div class="right-actions">
+      <!-- 유저 칩 -->
+      <div id="userChip" class="user-chip" aria-live="polite">
+        <img id="userAvatar" alt="" />
+        <span id="userName">사용자</span>
       </div>
+
+      <!-- 로그인/로그아웃 버튼 -->
+      <button id="loginBtn" class="btn-sm primary" type="button">로그인</button>
+      <button id="logoutBtn" class="btn-sm hidden" type="button">로그아웃</button>
+
+      <!-- 햄버거: 우측 사이드 패널 토글 -->
+      <button
+        id="toolsBtn"
+        class="hamb"
+        aria-label="툴 메뉴 열기/닫기"
+        aria-expanded="false"
+        aria-controls="toolsDrawer">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M3 6h18M3 12h18M3 18h18"/>
+        </svg>
+      </button>
     </div>
+  </div>
+</nav>
+<!-- 우측 슬라이드 패널 (툴 링크) -->
+<div id="toolsBackdrop" class="tools-backdrop" aria-hidden="true"></div>
+<aside id="toolsDrawer" class="tools-drawer" role="dialog" aria-modal="true" aria-label="빠른 툴 링크">
+  <header class="tools-header">
+    <h3>AI툴</h3>
+    <button class="tools-close" aria-label="닫기" onclick="closeTools()">✕</button>
+  </header>
+
+  <nav class="tools-body">
+    <a class="tool-item" href="https://chat.openai.com" target="_blank" rel="noopener" onclick="closeTools()">
+      <span class="tool-name">🤖 ChatGPT</span>
+      <span class="tool-desc">대본/아이디어 생성</span>
+    </a>
+
+    <a class="tool-item" href="https://www.midjourney.com/" target="_blank" rel="noopener" onclick="closeTools()">
+      <span class="tool-name">🎨 Midjourney</span>
+      <span class="tool-desc">이미지 생성</span>
+    </a>
+
+    <a class="tool-item" href="https://suno.com" target="_blank" rel="noopener" onclick="closeTools()">
+      <span class="tool-name">🎵 Suno</span>
+      <span class="tool-desc">음악 생성</span>
+    </a>
+
+    <a class="tool-item" href="https://labs.google/fx/tools/videofx" target="_blank" rel="noopener" onclick="closeTools()">
+      <span class="tool-name">🎬 Veo 3</span>
+      <span class="tool-desc">영상 생성 (Google VideoFX)</span>
+    </a>
+
+    <a class="tool-item" href="https://klingai.com/" target="_blank" rel="noopener" onclick="closeTools()">
+      <span class="tool-name">🚀 Kling</span>
+      <span class="tool-desc">고품질 비디오 생성</span>
+    </a>
   </nav>
+</aside>
 
   <!-- 헤더 -->
   <header class="hero">
@@ -211,6 +273,43 @@
     © 2025 찰스의 AI 스튜디오
   </footer>
 
-  <script type="module" src="assets/app.js"></script>
+<script type="module" src="assets/app.js?v=2"></script>
+
+<!-- 우측 패널 토글/닫기 (index와 동일) -->
+<script>
+(function () {
+  const btn = document.getElementById('toolsBtn');
+  const drawer = document.getElementById('toolsDrawer');
+  const backdrop = document.getElementById('toolsBackdrop');
+
+  if (!btn || !drawer || !backdrop) return;
+
+  function openTools() {
+    document.body.classList.add('tools-open');
+    btn.setAttribute('aria-expanded', 'true');
+    setTimeout(() => drawer.querySelector('a.tool-item')?.focus(), 0);
+  }
+  function closeTools() {
+    document.body.classList.remove('tools-open');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.focus();
+  }
+  function toggleTools() {
+    if (document.body.classList.contains('tools-open')) closeTools();
+    else openTools();
+  }
+
+  btn.addEventListener('click', toggleTools);
+  backdrop.addEventListener('click', closeTools);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeTools(); });
+  document.addEventListener('click', (e) => {
+    if (!document.body.classList.contains('tools-open')) return;
+    if (drawer.contains(e.target) || btn.contains(e.target)) return;
+    closeTools();
+  });
+
+  window.closeTools = closeTools;
+})();
+</script>
 </body>
 </html>
