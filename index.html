@@ -37,58 +37,56 @@
         <button id="logoutBtn" class="btn-sm hidden" type="button">로그아웃</button>
 
         <!-- 햄버거: 우측 사이드 패널 토글 -->
-       <!-- 햄버거: 우측 사이드 패널 토글 -->
-<button
-  id="toolsBtn"
-  class="hamb"
-  aria-label="툴 메뉴 열기/닫기"
-  aria-expanded="false"
-  aria-controls="toolsDrawer">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-       stroke="currentColor" stroke-width="2" stroke-linecap="round">
-    <path d="M3 6h18M3 12h18M3 18h18"/>
-  </svg>
-</button>
-
+        <button
+          id="toolsBtn"
+          class="hamb"
+          aria-label="툴 메뉴 열기/닫기"
+          aria-expanded="false"
+          aria-controls="toolsDrawer">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M3 6h18M3 12h18M3 18h18"/>
+          </svg>
+        </button>
       </div>
     </div>
   </nav>
 
-<!-- 우측 슬라이드 패널 (툴 링크) -->
-<div id="toolsBackdrop" class="tools-backdrop" aria-hidden="true"></div>
-<aside id="toolsDrawer" class="tools-drawer" role="dialog" aria-modal="true" aria-label="빠른 툴 링크">
-  <header class="tools-header">
-    <h3>AI툴</h3>
-    <button class="tools-close" aria-label="닫기" onclick="closeTools()">✕</button>
-  </header>
+  <!-- 우측 슬라이드 패널 (툴 링크) -->
+  <div id="toolsBackdrop" class="tools-backdrop" aria-hidden="true"></div>
+  <aside id="toolsDrawer" class="tools-drawer" role="dialog" aria-modal="true" aria-label="빠른 툴 링크">
+    <header class="tools-header">
+      <h3>AI툴</h3>
+      <button class="tools-close" aria-label="닫기" onclick="closeTools()">✕</button>
+    </header>
 
-  <nav class="tools-body">
-    <a class="tool-item" href="https://chat.openai.com" target="_blank" rel="noopener" onclick="closeTools()">
-      <span class="tool-name">🤖 ChatGPT</span>
-      <span class="tool-desc">대본/아이디어 생성</span>
-    </a>
+    <nav class="tools-body">
+      <a class="tool-item" href="https://chat.openai.com" target="_blank" rel="noopener" onclick="closeTools()">
+        <span class="tool-name">🤖 ChatGPT</span>
+        <span class="tool-desc">대본/아이디어 생성</span>
+      </a>
 
-    <a class="tool-item" href="https://www.midjourney.com/" target="_blank" rel="noopener" onclick="closeTools()">
-      <span class="tool-name">🎨 Midjourney</span>
-      <span class="tool-desc">이미지 생성</span>
-    </a>
+      <a class="tool-item" href="https://www.midjourney.com/" target="_blank" rel="noopener" onclick="closeTools()">
+        <span class="tool-name">🎨 Midjourney</span>
+        <span class="tool-desc">이미지 생성</span>
+      </a>
 
-    <a class="tool-item" href="https://suno.com" target="_blank" rel="noopener" onclick="closeTools()">
-      <span class="tool-name">🎵 Suno</span>
-      <span class="tool-desc">음악 생성</span>
-    </a>
+      <a class="tool-item" href="https://suno.com" target="_blank" rel="noopener" onclick="closeTools()">
+        <span class="tool-name">🎵 Suno</span>
+        <span class="tool-desc">음악 생성</span>
+      </a>
 
-    <a class="tool-item" href="https://labs.google/fx/tools/videofx" target="_blank" rel="noopener" onclick="closeTools()">
-      <span class="tool-name">🎬 Veo 3</span>
-      <span class="tool-desc">영상 생성 (Google VideoFX)</span>
-    </a>
+      <a class="tool-item" href="https://labs.google/fx/tools/videofx" target="_blank" rel="noopener" onclick="closeTools()">
+        <span class="tool-name">🎬 Veo 3</span>
+        <span class="tool-desc">영상 생성 (Google VideoFX)</span>
+      </a>
 
-    <a class="tool-item" href="https://klingai.com/" target="_blank" rel="noopener" onclick="closeTools()">
-      <span class="tool-name">🚀 Kling</span>
-      <span class="tool-desc">고품질 비디오 생성</span>
-    </a>
-  </nav>
-</aside>
+      <a class="tool-item" href="https://klingai.com/" target="_blank" rel="noopener" onclick="closeTools()">
+        <span class="tool-name">🚀 Kling</span>
+        <span class="tool-desc">고품질 비디오 생성</span>
+      </a>
+    </nav>
+  </aside>
 
   <!-- 로그인 모달 (기본 숨김) -->
   <div id="authModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="authTitle" style="display:none">
@@ -128,24 +126,23 @@
 
       <div class="wf-viewport" tabindex="0" aria-label="워크플로 슬라이더">
         <div class="wf-track">
-          <!-- 카드 1: 전체가 링크 -->
-         <a href="workflow-1.html"
-   class="wf-card card is-link"
-   data-requires-auth
-   style="text-decoration:none; color:inherit">
-  <div class="wf-pill">Workflow 1</div>
-  <h3>캐릭터 제어 영상 만들기</h3>
-  <p class="sub">AI로 만든 캐릭터를 움직이고, 말하고, 표정까지 제어하는 법.</p>
-  <div class="video">
-    <iframe
-      src="https://www.youtube.com/embed/sYYQxGDWxZ0"
-      title="캐릭터 제어 예시"
-      allowfullscreen
-      loading="lazy"
-    ></iframe>
-  </div>
-</a>
-
+          <!-- 카드 1: 전체가 링크 (로그인 필요) -->
+          <a href="workflow-1.html"
+             class="wf-card card is-link"
+             data-requires-auth
+             style="text-decoration:none; color:inherit">
+            <div class="wf-pill">Workflow 1</div>
+            <h3>캐릭터 제어 영상 만들기</h3>
+            <p class="sub">AI로 만든 캐릭터를 움직이고, 말하고, 표정까지 제어하는 법.</p>
+            <div class="video">
+              <iframe
+                src="https://www.youtube.com/embed/sYYQxGDWxZ0"
+                title="캐릭터 제어 예시"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+          </a>
 
           <article class="wf-card card">
             <div class="wf-pill">Workflow 2</div>
@@ -236,7 +233,7 @@
 
   <!-- 스크립트 -->
   <script type="module" src="assets/slider.js"></script>
-  <script type="module" src="assets/app.js"></script>
+  <!-- 주의: 중복 초기화 방지 위해 assets/app.js는 로드하지 않음 -->
 
   <!-- 우측 패널 토글/닫기 -->
   <script>
@@ -244,7 +241,6 @@
       const btn = document.querySelector('.hamb');
       const wasOpen = document.body.classList.toggle('tools-open');
       btn.setAttribute('aria-expanded', String(wasOpen));
-      // 첫 링크로 포커스 이동
       if (wasOpen) {
         document.getElementById('toolsDrawer')
           .querySelector('a.tool-item')?.focus();
@@ -257,181 +253,174 @@
       document.body.classList.remove('tools-open');
       btn.setAttribute('aria-expanded', 'false');
     }
-    // 배경 클릭/ESC 닫기
     document.getElementById('toolsBackdrop').addEventListener('click', closeTools);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeTools(); });
-(function () {
-  const btn = document.getElementById('toolsBtn');
-  const drawer = document.getElementById('toolsDrawer');
-  const backdrop = document.getElementById('toolsBackdrop');
-
-  if (!btn || !drawer || !backdrop) return; // 방어
-
-  function openTools() {
-    document.body.classList.add('tools-open');
-    btn.setAttribute('aria-expanded', 'true');
-    // 첫 포커스 이동
-    setTimeout(() => drawer.querySelector('a.tool-item')?.focus(), 0);
-  }
-  function closeTools() {
-    document.body.classList.remove('tools-open');
-    btn.setAttribute('aria-expanded', 'false');
-    btn.focus();
-  }
-  function toggleTools() {
-    if (document.body.classList.contains('tools-open')) closeTools();
-    else openTools();
-  }
-
-  // 클릭/키보드 핸들러
-  btn.addEventListener('click', toggleTools);
-  backdrop.addEventListener('click', closeTools);
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeTools(); });
-
-  // 패널 바깥 클릭 시 닫기
-  document.addEventListener('click', (e) => {
-    if (!document.body.classList.contains('tools-open')) return;
-    if (drawer.contains(e.target) || btn.contains(e.target)) return;
-    closeTools();
-  });
-
-  // 디버깅용으로 전역에 노출(선택)
-  window.toggleTools = toggleTools;
-  window.closeTools = closeTools;
-})();
+    (function () {
+      const btn = document.getElementById('toolsBtn');
+      const drawer = document.getElementById('toolsDrawer');
+      const backdrop = document.getElementById('toolsBackdrop');
+      if (!btn || !drawer || !backdrop) return;
+      function openTools() {
+        document.body.classList.add('tools-open');
+        btn.setAttribute('aria-expanded', 'true');
+        setTimeout(() => drawer.querySelector('a.tool-item')?.focus(), 0);
+      }
+      function closeTools() {
+        document.body.classList.remove('tools-open');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.focus();
+      }
+      function toggleTools() {
+        if (document.body.classList.contains('tools-open')) closeTools();
+        else openTools();
+      }
+      btn.addEventListener('click', toggleTools);
+      backdrop.addEventListener('click', closeTools);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeTools(); });
+      document.addEventListener('click', (e) => {
+        if (!document.body.classList.contains('tools-open')) return;
+        if (drawer.contains(e.target) || btn.contains(e.target)) return;
+        closeTools();
+      });
+      window.toggleTools = toggleTools;
+      window.closeTools = closeTools;
+    })();
   </script>
 
+  <!-- Firebase + Auth Gate (단일 모듈 스크립트) -->
   <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import {
-    getAuth, GoogleAuthProvider,
-    signInWithPopup, signInWithRedirect, getRedirectResult,
-    signOut, onAuthStateChanged,
-    setPersistence, browserLocalPersistence
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth, GoogleAuthProvider,
+      signInWithPopup, signInWithRedirect, getRedirectResult,
+      signOut, onAuthStateChanged,
+      setPersistence, browserLocalPersistence
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  // ===== Helpers =====
-  function $(id){ return document.getElementById(id); }
-  function safeDisplay(el, val){ if(el) el.style.display = val; }
-  function toggleAuth(open){
-    const modal = $("authModal");
-    if(!modal) return;
-    safeDisplay(modal, open ? "flex" : "none");
-    if(open) document.body.classList.remove("menu-open");
-  }
-  window.toggleAuth = toggleAuth;
+    const $ = (id) => document.getElementById(id);
+    const toggleAuth = (open) => {
+      const modal = $("authModal");
+      if (!modal) return;
+      modal.style.display = open ? "flex" : "none";
+      if (open) document.body.classList.remove("menu-open");
+    };
+    window.toggleAuth = toggleAuth;
 
-  function url(p){
-    try { new URL(p); return p; } catch(e) {}
-    return new URL(p, document.baseURI).toString();
-  }
+    const url = (p) => { try { new URL(p); return p; } catch { return new URL(p, document.baseURI).toString(); } };
 
-  // ===== Firebase Config =====
-  const firebaseConfig = {
-    apiKey: "AIzaSyD_IuakhMe5Qofl85JDdAJ1IUu1eaN5paU",
-    authDomain: "charles01-9eee3.firebaseapp.com",
-    projectId: "charles01-9eee3",
-    messagingSenderId: "409220278869",
-    appId: "1:409220278869:web:ebbab45579e96c22a482dc",
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyD_IuakhMe5Qofl85JDdAJ1IUu1eaN5paU",
+      authDomain: "charles01-9eee3.firebaseapp.com",
+      projectId: "charles01-9eee3",
+      messagingSenderId: "409220278869",
+      appId: "1:409220278869:web:ebbab45579e96c22a482dc",
+    };
 
-  // ===== Init =====
-  document.addEventListener("DOMContentLoaded", async () => {
-    const app = initializeApp(firebaseConfig);
+    // 중복 초기화 방지
+    const app  = getApps().length ? getApp() : initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    try { await setPersistence(auth, browserLocalPersistence); } catch(e){}
+    document.addEventListener("DOMContentLoaded", async () => {
+      // UI refs
+      const loginBtn   = $("loginBtn");
+      const logoutBtn  = $("logoutBtn");
+      const userChip   = $("userChip");
+      const userName   = $("userName");
+      const userAvatar = $("userAvatar");
+      const googleBtn  = $("googleSignIn");
 
-    try { await getRedirectResult(auth); } catch(e){}
+      try { await setPersistence(auth, browserLocalPersistence); } catch(e){ console.warn("persistence:", e?.code||e); }
+      try { await getRedirectResult(auth); } catch(e){ console.warn("redirectResult:", e?.code||e); }
 
-    // UI refs
-    const loginBtn  = $("loginBtn");
-    const logoutBtn = $("logoutBtn");
-    const userChip  = $("userChip");
-    const userName  = $("userName");
-    const userAvatar= $("userAvatar");
-
-    let currentUser = null;
-    window.currentUser = null;
-
-    function showLoggedInUI(user){
-      if (userName) userName.textContent = user.displayName || user.email || "사용자";
-      if (userAvatar){ userAvatar.src = user.photoURL || ""; }
-      userChip?.classList.remove("hidden");
-      loginBtn?.classList.add("hidden");
-      logoutBtn?.classList.remove("hidden");
-    }
-    function showLoggedOutUI(){
-      userChip?.classList.add("hidden");
-      loginBtn?.classList.remove("hidden");
-      logoutBtn?.classList.add("hidden");
-    }
-
-    function tryPostLoginRedirect(){
-      const next = localStorage.getItem("postLoginRedirect");
-      if(next){
-        localStorage.removeItem("postLoginRedirect");
-        location.href = url(next);
+      async function doGoogleLogin() {
+        try {
+          await signInWithPopup(auth, provider);
+        } catch (err) {
+          const code = err?.code || "";
+          if (code.includes("popup") || code === "auth/popup-blocked" || code === "auth/cancelled-popup-request") {
+            await signInWithRedirect(auth, provider);
+          } else {
+            alert("로그인 실패: " + (code || err?.message || err));
+            console.error(err);
+          }
+        }
       }
-    }
 
-    loginBtn?.addEventListener("click", async () => {
-      try { await signInWithPopup(auth, provider); }
-      catch(err){ await signInWithRedirect(auth, provider); }
+      // 버튼 바인딩
+      loginBtn?.addEventListener("click", doGoogleLogin);
+      googleBtn?.addEventListener("click", doGoogleLogin);
+      logoutBtn?.addEventListener("click", async () => { try { await signOut(auth); } catch(e){ console.error(e); } });
+
+      function showLoggedInUI(user){
+        if (userName) userName.textContent = user?.displayName || user?.email || "사용자";
+        if (userAvatar){ userAvatar.src = user?.photoURL || ""; userAvatar.alt = user?.displayName || user?.email || "사용자"; }
+        userChip?.classList.remove("hidden");
+        userChip && (userChip.style.display = "inline-flex");
+        loginBtn?.classList.add("hidden");
+        logoutBtn?.classList.remove("hidden");
+      }
+      function showLoggedOutUI(){
+        userChip?.classList.add("hidden");
+        userChip && (userChip.style.display = "none");
+        loginBtn?.classList.remove("hidden");
+        logoutBtn?.classList.add("hidden");
+      }
+
+      function tryPostLoginRedirect(){
+        const key = "postLoginRedirect";
+        const next = localStorage.getItem(key);
+        if (next) {
+          localStorage.removeItem(key);
+          location.href = url(next);
+        }
+      }
+
+      // 링크 잠금/해제 (비로그인 시 절대 이동 금지)
+      function lockProtectedLinks() {
+        document.querySelectorAll('[data-requires-auth]').forEach(el => {
+          const href = el.getAttribute('href');
+          if (href && !el.dataset.authHref) el.dataset.authHref = href;
+          el.setAttribute('href', 'javascript:void(0)');
+          el.setAttribute('aria-disabled', 'true');
+          el.setAttribute('title', '로그인 후 이용 가능');
+          el.style.cursor = 'not-allowed';
+        });
+      }
+      function unlockProtectedLinks() {
+        document.querySelectorAll('[data-requires-auth]').forEach(el => {
+          if (el.dataset.authHref) el.setAttribute('href', el.dataset.authHref);
+          el.removeAttribute('aria-disabled');
+          el.removeAttribute('title');
+          el.style.removeProperty('cursor');
+        });
+      }
+
+      onAuthStateChanged(auth, (user) => {
+        window.currentUser = user || null;
+        if (user) {
+          unlockProtectedLinks();
+          showLoggedInUI(user);
+          toggleAuth(false);
+          tryPostLoginRedirect();
+        } else {
+          lockProtectedLinks();
+          showLoggedOutUI();
+        }
+      });
+
+      // AUTH GATE (캡처링: 가장 먼저 가로채기)
+      document.addEventListener("click", (e) => {
+        const el = e.target.closest("[data-requires-auth]");
+        if (!el) return;
+        if (window.currentUser) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const next = el.dataset.authHref || el.getAttribute("href") || "/";
+        try { localStorage.setItem("postLoginRedirect", next); } catch {}
+        toggleAuth(true);
+      }, true);
     });
-    logoutBtn?.addEventListener("click", async () => { await signOut(auth); });
-
-    onAuthStateChanged(auth, (user) => {
-      currentUser = user;
-      window.currentUser = user;
-      if(user){ showLoggedInUI(user); toggleAuth(false); tryPostLoginRedirect(); }
-      else { showLoggedOutUI(); }
-    });
-
-    // === AUTH GATE ===
-    document.addEventListener("click", (e) => {
-      const el = e.target.closest("[data-requires-auth]");
-      if(!el) return;
-      if(currentUser) return;
-      e.preventDefault();
-      const href = el.dataset.authHref || el.getAttribute("href") || "/";
-      localStorage.setItem("postLoginRedirect", href);
-      toggleAuth(true);
-    }, true);
-  });
-
-  // UI refs
-const loginBtn   = $("loginBtn");
-const logoutBtn  = $("logoutBtn");
-const userChip   = $("userChip");
-const userName   = $("userName");
-const userAvatar = $("userAvatar");
-const googleBtn  = $("googleSignIn");   // ← 모달 버튼 참조 추가
-
-// ...
-
-// 로그인 핸들러 (공용 함수)
-async function doGoogleLogin() {
-  try {
-    await signInWithPopup(auth, provider);
-  } catch (err) {
-    const code = err?.code || "";
-    // 팝업 차단/취소 등은 리다이렉트로 폴백
-    if (code.includes("popup") || code === "auth/popup-blocked" || code === "auth/cancelled-popup-request") {
-      await signInWithRedirect(auth, provider);
-    } else {
-      alert("로그인 실패: " + (code || err?.message || err));
-      console.error(err);
-    }
-  }
-}
-
-// 버튼 바인딩
-loginBtn?.addEventListener("click", doGoogleLogin);
-googleBtn?.addEventListener("click", doGoogleLogin);  // ← 이 줄이 핵심
-
-logoutBtn?.addEventListener("click", async () => { await signOut(auth); });
-</script>
+  </script>
 </body>
 </html>
