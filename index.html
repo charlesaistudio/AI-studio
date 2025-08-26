@@ -400,6 +400,38 @@
       toggleAuth(true);
     }, true);
   });
+
+  // UI refs
+const loginBtn   = $("loginBtn");
+const logoutBtn  = $("logoutBtn");
+const userChip   = $("userChip");
+const userName   = $("userName");
+const userAvatar = $("userAvatar");
+const googleBtn  = $("googleSignIn");   // ← 모달 버튼 참조 추가
+
+// ...
+
+// 로그인 핸들러 (공용 함수)
+async function doGoogleLogin() {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (err) {
+    const code = err?.code || "";
+    // 팝업 차단/취소 등은 리다이렉트로 폴백
+    if (code.includes("popup") || code === "auth/popup-blocked" || code === "auth/cancelled-popup-request") {
+      await signInWithRedirect(auth, provider);
+    } else {
+      alert("로그인 실패: " + (code || err?.message || err));
+      console.error(err);
+    }
+  }
+}
+
+// 버튼 바인딩
+loginBtn?.addEventListener("click", doGoogleLogin);
+googleBtn?.addEventListener("click", doGoogleLogin);  // ← 이 줄이 핵심
+
+logoutBtn?.addEventListener("click", async () => { await signOut(auth); });
 </script>
 </body>
 </html>
