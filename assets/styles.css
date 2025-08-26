@@ -79,17 +79,27 @@ img, video { max-width: 100%; height: auto; }
 .tools-panel { display: none !important; }
 
 /* ========== Hero ========== */
-.hero {
-  position: relative;
+..hero {
   padding: clamp(28px, 7vw, 60px) 0 24px;
-  background:
-    radial-gradient(900px 540px at 12% -10%, rgba(239,68,68,.14) 0%, transparent 60%),
-    radial-gradient(900px 540px at 88% 0%, rgba(52,82,255,.14) 0%, transparent 60%),
-    url("assets/ceo.png");   /* ← 대표님 사진 */
-  background-repeat: no-repeat, no-repeat, no-repeat;
-  background-position: left top, right top, right center; /* 세 번째가 이미지 */
-  background-size: auto, auto, min(46vw, 600px);          /* 인물 크기 */
+  background: url("assets/ceo.png") no-repeat center center;
+  background-size: cover; /* 전체 꽉 채움 */
+  color: #fff;            /* 사진 위에서 글씨 잘 보이도록 흰색 */
+  position: relative;
 }
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45); /* 살짝 어둡게 오버레이 → 글자 가독성 ↑ */
+}
+
+.hero .wrap {
+  position: relative; 
+  z-index: 1; /* 오버레이 위로 글씨 나오게 */
+}
+
+
 .hero h1 { font-size: clamp(22px, 6vw, 36px); line-height: 1.2; margin: 6px 0 8px; }
 .lead { color: var(--muted); max-width: 72ch; font-size: clamp(14px, 3.6vw, 16px); }
 
