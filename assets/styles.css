@@ -51,7 +51,7 @@ img, video { max-width: 100%; height: auto; }
 }
 .logo { font-weight: 800; letter-spacing: .2px; white-space: nowrap; }
 
-/* 상단 가로 메뉴(모바일에서도 노출) */
+/* 상단 가로 메뉴 */
 .nav-links {
   list-style: none; display: flex; gap: 16px; margin: 0; padding: 0;
   flex-wrap: wrap;
@@ -75,26 +75,31 @@ img, video { max-width: 100%; height: auto; }
 
 .hamb { background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; }
 
-/* (옛) 드롭다운 완전 비활성화 - 충돌 방지용 */
+/* (옛) 드롭다운 완전 비활성화 */
 .tools-panel { display: none !important; }
 
 /* ========== Hero ========== */
 .hero {
+  position: relative;
   padding: clamp(28px, 7vw, 60px) 0 24px;
   background:
     radial-gradient(900px 540px at 12% -10%, rgba(239,68,68,.14) 0%, transparent 60%),
-    radial-gradient(900px 540px at 88% 0%, rgba(52,82,255,.14) 0%, transparent 60%);
+    radial-gradient(900px 540px at 88% 0%, rgba(52,82,255,.14) 0%, transparent 60%),
+    url("assets/ceo.png");   /* ← 대표님 사진 */
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: left top, right top, right center; /* 세 번째가 이미지 */
+  background-size: auto, auto, min(46vw, 600px);          /* 인물 크기 */
 }
 .hero h1 { font-size: clamp(22px, 6vw, 36px); line-height: 1.2; margin: 6px 0 8px; }
 .lead { color: var(--muted); max-width: 72ch; font-size: clamp(14px, 3.6vw, 16px); }
-.cta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
-.btn {
-  display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 900;
-  padding: 12px 16px; border-radius: 12px; border: 1px solid var(--line);
-  box-shadow: var(--shadow); transition: .15s transform, .15s box-shadow; min-height: 44px;
+
+/* 모바일에서 이미지 줄이거나 옆으로 빼기 */
+@media (max-width: 768px){
+  .hero {
+    background-size: auto, auto, 70vw;
+    background-position: left top, right top, 120% center; /* 오른쪽 더 밀어내기 */
+  }
 }
-.btn-primary { background: var(--brand); color: #fff; border-color: var(--brand); }
-.btn-ghost { background: var(--pill); }
 
 /* ========== Sections & Cards ========== */
 section { padding: clamp(28px, 7vw, 42px) 0; }
@@ -105,30 +110,6 @@ section h2 { font-size: clamp(18px, 4.8vw, 24px); margin: 0 0 8px; }
   padding: clamp(14px, 4.2vw, 18px); box-shadow: var(--shadow);
   transition: .15s transform, .15s box-shadow, .15s border-color;
 }
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1fr 300px; /* 왼쪽 넓게, 오른쪽은 300px */
-  gap: 24px;
-  align-items: center;
-}
-
-.hero-photo img {
-  width: 100%;
-  max-width: 280px;
-  border-radius: 16px;     /* 둥근 모서리 */
-  box-shadow: 0 8px 20px rgba(0,0,0,.25);
-  object-fit: cover;
-}
-@media (max-width: 768px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-  .hero-photo {
-    margin-top: 20px;
-  }
-}
-
 
 /* ========== Video (쇼츠 전용) ========== */
 .video {
@@ -137,11 +118,11 @@ section h2 { font-size: clamp(18px, 4.8vw, 24px); margin: 0 0 8px; }
 }
 .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
-/* ========== Modal (툴 패널 위에 오도록 z-index 크게) ========== */
+/* ========== Modal ========== */
 .modal-backdrop{
   position:fixed; inset:0; background:rgba(0,0,0,.6);
   display:none; align-items:center; justify-content:center;
-  z-index: 2000; /* tools-drawer(1001)보다 큼 */
+  z-index: 2000;
 }
 .modal{
   width:min(480px, 92vw); background:var(--pill); border:1px solid var(--line);
@@ -150,7 +131,7 @@ section h2 { font-size: clamp(18px, 4.8vw, 24px); margin: 0 0 8px; }
 .modal h3{ margin:0 0 8px; }
 .modal p{ margin:0 0 14px; color: var(--muted); }
 .modal .actions{ display:flex; flex-direction:column; gap:10px; }
-.modal .close{ position:absolute; right:16px; top:12px; background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer; }
+.modal .close{ position:absolute; right:16px; top:12px; background:none; border:none; color: var(--muted); font-size:18px; cursor:pointer; }
 
 /* ===== Workflow Carousel ===== */
 .wf-carousel { position: relative; }
@@ -204,7 +185,7 @@ section h2 { font-size: clamp(18px, 4.8vw, 24px); margin: 0 0 8px; }
   background: linear-gradient(-90deg, rgba(11,15,23,1), rgba(11,15,23,0));
 }
 
-/* 모바일: 카드 폭 넓혀 터치 스와이프 감각 강화 */
+/* 모바일: 카드 폭 넓혀 터치 스와이프 */
 @media (max-width: 768px){
   .wf-card { min-width: 82%; }
 }
@@ -213,9 +194,8 @@ section h2 { font-size: clamp(18px, 4.8vw, 24px); margin: 0 0 8px; }
 .wf-card.is-link .video { cursor: pointer; }
 .wf-card.is-link iframe { pointer-events: none; }
 
-/* ===== 우측 슬라이드 패널 (오프캔버스) ===== */
-.tools-open { overflow: hidden; } /* 패널 열렸을 때 바디 스크롤 잠금 */
-
+/* ===== 우측 슬라이드 패널 ===== */
+.tools-open { overflow: hidden; }
 .tools-backdrop{
   position: fixed; inset: 0; background: rgba(0,0,0,.55);
   opacity: 0; pointer-events: none; transition: opacity .2s ease;
@@ -226,7 +206,7 @@ section h2 { font-size: clamp(18px, 4.8vw, 24px); margin: 0 0 8px; }
   width: min(360px, 88vw);
   background: var(--pill); border-left: 1px solid var(--line);
   box-shadow: var(--shadow);
-  transform: translateX(100%) !important; /* 닫힘 기본값 강제 */
+  transform: translateX(100%) !important;
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
