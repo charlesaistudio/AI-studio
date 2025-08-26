@@ -3,15 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>워크플로 1 — 캐릭터 제어 영상 만들기 | 찰스의 AI 스튜디오</title>
+  <title>워크플로 1 — 캐릭터 제어 완벽 가이드 | 찰스의 AI 스튜디오</title>
   <meta name="theme-color" content="#ef4444">
   <link rel="icon" href="favicon.ico" />
   <meta name="color-scheme" content="dark">
   <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/edu.css">
 </head>
 <body>
   <input id="menu-toggle" type="checkbox" hidden>
 
+  <!-- 상단 네비 -->
   <nav class="nav">
     <div class="nav-inner">
       <div class="logo"><a href="index.html" style="text-decoration:none">찰스의 AI 스튜디오</a></div>
@@ -39,83 +41,176 @@
     </div>
   </nav>
 
-  <nav class="nav-links-mobile wrap" aria-label="모바일 메뉴" style="display:none"></nav>
-
+  <!-- 헤더 -->
   <header class="hero">
     <div class="wrap">
-      <h1>워크플로 1 — <span style="color:var(--brand)">캐릭터 제어 영상</span> 만들기</h1>
-      <p class="lead">AI로 만든 캐릭터를 움직이고, 말하고, 표정을 제어해 쇼츠/롱폼으로 완성.</p>
+      <h1>🎭 AI 캐릭터 제어 완벽 가이드</h1>
+      <p class="lead">내가 원하는 캐릭터를 자유자재로 조종하는 방법</p>
       <div class="cta">
         <a class="btn btn-ghost" href="index.html#flow">← 메인으로</a>
-        <a class="btn btn-primary" href="#steps">제작 단계 보기</a>
       </div>
     </div>
   </header>
 
-  <main class="wrap">
+  <!-- 본문 (교육 스코프 적용) -->
+  <main class="wrap edu">
+    <!-- 준비사항 -->
+    <section>
+      <h2>📋 시작하기 전 준비사항</h2>
+      <div class="grid g-2">
+        <div class="card">
+          <h3>필수 도구</h3>
+          <ul class="checklist">
+            <li>Runway ML 계정 (runway.ml)</li>
+            <li>MidJourney 계정</li>
+            <li>제어하고 싶은 원본 비디오 (MP4/MOV)</li>
+            <li>기본 이미지 편집 도구(스크린샷 가능)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>예상 소요시간</h3>
+          <ul>
+            <li>초기 설정: 10분</li>
+            <li>1개 캐릭터 제작: 15–30분</li>
+            <li>고급 응용: 1시간+</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout warn" style="margin-top:12px">
+        <strong>TIP</strong><br>처음에는 5–10초 짧은 클립으로 테스트하면 실패 비용이 낮습니다.
+      </div>
+    </section>
+
+    <!-- 단계별 가이드 -->
+    <section id="steps">
+      <h2>🔥 1단계: 원본 영상 준비 및 업로드</h2>
+      <ol class="steps">
+        <li>runway.ml 접속 → 로그인 → <strong>New Project</strong></li>
+        <li><strong>Video Generation</strong> 또는 <strong>Character Animation</strong> 선택</li>
+        <li>원본 비디오 업로드 (권장 해상도: <code>1080p+</code>, 길이 <code>5–30초</code>)</li>
+      </ol>
+      <ul class="checklist" style="margin-top:10px">
+        <li>얼굴이 명확히 보이는 영상</li>
+        <li>조명이 균등하고 카메라 움직임이 적음</li>
+        <li>배경이 복잡하지 않은 영상</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>🖼️ 2단계: 첫 프레임 스크린샷 추출</h2>
+      <ol class="steps">
+        <li>가장 명확한 얼굴 프레임 선택 (표정/각도 자연스러운 순간)</li>
+        <li>정사각형으로 크롭, <code>1024×1024</code> 이상 JPG/PNG 저장</li>
+      </ol>
+      <div class="callout tip" style="margin-top:10px">
+        <strong>단축키</strong><br>
+        Windows: <kbd>Win</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd> · macOS: <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>4</kbd>
+      </div>
+    </section>
+
+    <section>
+      <h2>🎨 3단계: MidJourney에서 캐릭터 변환</h2>
+      <div class="card">
+        <p><code>/imagine</code>에 이미지 + 프롬프트 + <code>--iw 1</code>로 시작</p>
+        <ul>
+          <li>예) <code>anime girl with long hair, smiling --iw 1</code></li>
+          <li>예) <code>realistic businessman in suit, professional --iw 1</code></li>
+          <li>예) <code>Studio Ghibli style --iw 1</code> / <code>Pixar style --iw 1</code></li>
+        </ul>
+        <p class="sub">이미지 웨이트: <code>--iw 0.5</code>(50%), <code>--iw 2</code>(200%)</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>🔄 4단계: 캐릭터를 Runway로 재업로드</h2>
+      <ol class="steps">
+        <li>MidJourney 결과에서 원하는 이미지 <strong>Upscale(U1~U4)</strong> → 다운로드</li>
+        <li>Runway ML로 돌아가 <strong>Image to Video</strong> / <strong>Character Animation</strong> 선택</li>
+        <li>업로드한 캐릭터에 원본 영상의 움직임 패턴 적용 → 생성 시작</li>
+      </ol>
+      <div class="callout" style="margin-top:10px">
+        <strong>생성 시간</strong><br>일반적으로 2–5분 소요 (모델/길이에 따라 상이)
+      </div>
+    </section>
+
+    <section>
+      <h2>⚡ 5단계: 고급 테크닉 및 최적화</h2>
+      <div class="grid g-2">
+        <div class="card">
+          <h3>퀄리티 향상</h3>
+          <ul class="checklist">
+            <li>같은 각도의 레퍼런스 유지</li>
+            <li>조명 조건 통일, 표정 변화 최소화</li>
+            <li>원본 속도감 유지, 부드러운 전환</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>문제 해결</h3>
+          <ul>
+            <li>❌ 얼굴 일그러짐 → 더 명확한 원본 이미지로 교체</li>
+            <li>❌ 모션 부자연 → 원본 속도 조정/짧은 제스처부터</li>
+            <li>❌ 스타일 불일치 → 프롬프트 키워드 통일</li>
+            <li>❌ 저해상도 → MidJourney 업스케일 필수</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>🚀 6단계: 실전 응용 아이디어</h2>
+      <div class="grid g-3">
+        <div class="card">
+          <h3>콘텐츠</h3>
+          <ul>
+            <li>브랜드 마스코트 애니메이션</li>
+            <li>교육용 캐릭터 설명자</li>
+            <li>소셜미디어 아바타</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>비즈니스</h3>
+          <ul>
+            <li>AI 상담원 캐릭터</li>
+            <li>마케팅 영상 대변인</li>
+            <li>제품 설명 캐릭터 데모</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>창작</h3>
+          <ul>
+            <li>웹툰/만화 캐릭터 애니메이션</li>
+            <li>뮤직비디오 아티스트 아바타</li>
+            <li>버츄얼 인플루언서</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>💡 주의사항</h2>
+      <ul>
+        <li>✅ 본인 영상/허가받은 소스만 사용</li>
+        <li>✅ 상업적 이용 시 라이선스 확인</li>
+        <li>❌ 타인의 초상권 침해 금지</li>
+        <li>❌ 딥페이크 악용 금지</li>
+      </ul>
+    </section>
+
+    <!-- 예시 영상 -->
     <section>
       <h2>예시 영상</h2>
       <p class="sub">완성 결과물 레퍼런스</p>
       <div class="video">
-        <iframe src="https://www.youtube.com/embed/sYYQxGDWxZ0" title="캐릭터 제어 예시" allowfullscreen loading="lazy"></iframe>
-      </div>
-    </section>
-
-    <section id="steps">
-      <h2>제작 단계</h2>
-      <p class="sub">아이디어 → 캐릭터 시트 → 구동 → 립싱크/보이스 → 편집</p>
-      <div class="grid g-3">
-        <article class="card">
-          <h3>1) 캐릭터 디자인</h3>
-          <p class="sub">첫 프레임 스틸샷 → 이미지 모델(MJ 등)로 스타일 고정</p>
-          <ul>
-            <li>기준 포즈/의상/표정 확정</li>
-            <li>해상도와 비율(9:16/16:9) 먼저 결정</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3>2) 모션/컨트롤</h3>
-          <p class="sub">포즈 트래킹 or 비디오 리타게팅 도구로 움직임 이식</p>
-          <ul>
-            <li>레퍼런스 동작 준비 (짧고 확실한 제스처)</li>
-            <li>전/후 포즈 일치 체크</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3>3) 보이스/립싱크</h3>
-          <p class="sub">TTS/보이스 생성 + 립싱크 툴로 입모양 정합</p>
-          <ul>
-            <li>대사 스크립트 먼저 확정</li>
-            <li>자막 싱크는 0.1~0.2초 여유</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3>4) 합성/클린업</h3>
-          <p class="sub">배경/앞경 레이어링, 경계 디테일 보정</p>
-          <ul>
-            <li>헤어/손가락 경계 확인</li>
-            <li>컬러 매칭(피부톤/광원)</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3>5) 편집/출력</h3>
-          <p class="sub">훅-메시지-콜투액션 구조로 컷 편집</p>
-          <ul>
-            <li>쇼츠: 0–3초 강한 훅</li>
-            <li>롱폼: 챕터/하이라이트 마커</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <section>
-      <h2>다운로드/자료</h2>
-      <div class="grid g-2">
-        <a class="card btn btn-ghost" href="https://github.com/charlesaistudio/AI-studio" target="_blank" rel="noopener">GitHub 템플릿</a>
-        <a class="card btn btn-primary" href="index.html#apply">수강/문의</a>
+        <iframe src="https://www.youtube.com/embed/sYYQxGDWxZ0"
+          title="캐릭터 제어 예시" allowfullscreen loading="lazy"></iframe>
       </div>
     </section>
   </main>
 
   <footer class="wrap" style="padding:24px 0; color:var(--muted); border-top:1px solid var(--line);">
-    © 2025
+    © 2025 찰스의 AI 스튜디오
+  </footer>
+
+  <script type="module" src="assets/app.js"></script>
+</body>
+</html>

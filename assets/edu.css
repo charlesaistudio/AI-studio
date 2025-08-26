@@ -1,0 +1,68 @@
+/* ===== Scoped Education Styles ===== */
+
+/* 타이포 · 가독성 (교육 섹션 내부만) */
+.edu {
+  --edu-accent: var(--brand);
+  --edu-tip: #22c55e;
+  --edu-warn: #f59e0b;
+  --edu-danger: #ef4444;
+  --edu-bg: color-mix(in oklab, var(--pill), black 10%);
+  --edu-line: color-mix(in oklab, var(--line), white 10%);
+}
+.edu p, .edu li { font-size: 15.5px; }
+.edu h2 { margin: 0 0 12px; }
+.edu h3 { margin: 6px 0 8px; font-size: 16px; }
+
+/* 섹션 간격 살짝 늘림 */
+.edu section { padding: 26px 0; border-top: 1px dashed var(--line); }
+.edu section:first-of-type { border-top: 0; }
+
+/* 카드 간소화 */
+.edu .card {
+  background: var(--edu-bg);
+  border-color: var(--edu-line);
+}
+
+/* 단계 목록 (번호 원형 배지) */
+.edu .steps { counter-reset: step; list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.edu .steps > li {
+  position: relative; padding: 12px 12px 12px 46px; border: 1px solid var(--edu-line);
+  border-radius: 12px; background: var(--pill);
+}
+.edu .steps > li::before {
+  counter-increment: step; content: counter(step);
+  position: absolute; left: 12px; top: 12px; width: 24px; height: 24px;
+  display: grid; place-items: center; border-radius: 999px;
+  background: var(--edu-accent); color:#fff; font-weight: 900; font-size: 13px;
+}
+
+/* 체크리스트 */
+.edu .checklist { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.edu .checklist li {
+  padding-left: 28px; position: relative;
+}
+.edu .checklist li::before {
+  content: "✔"; position: absolute; left: 0; top: 0; color: var(--edu-tip); font-weight: 900;
+}
+
+/* 콜아웃 박스 */
+.edu .callout {
+  border: 1px solid var(--edu-line); background: var(--pill); border-radius: 12px; padding: 12px 14px;
+}
+.edu .callout strong { display: inline-block; margin-bottom: 6px; }
+.edu .callout.tip { border-color: color-mix(in oklab, var(--edu-tip), white 30%); }
+.edu .callout.warn { border-color: color-mix(in oklab, var(--edu-warn), white 30%); }
+.edu .callout.danger { border-color: color-mix(in oklab, var(--edu-danger), white 30%); }
+
+/* 키보드/코드 토큰 */
+.edu kbd, .edu code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px; background: #0b1220; border: 1px solid var(--edu-line);
+  border-radius: 8px; padding: 2px 6px;
+}
+.edu kbd { box-shadow: inset 0 -1px 0 rgba(255,255,255,.06); }
+
+/* 2/3열 레이아웃 보완 */
+@media (min-width: 820px){
+  .edu .g-2 { grid-template-columns: 1.2fr .8fr; }
+}

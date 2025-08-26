@@ -103,3 +103,66 @@ section h2 { font-size: clamp(18px, 4.8vw, 24px); margin: 0 0 8px; }
 .modal p{ margin:0 0 14px; color:var(--muted); }
 .modal .actions{ display:flex; flex-direction:column; gap:10px; }
 .modal .close{ position:absolute; right:16px; top:12px; background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer; }
+
+/* ===== Workflow Carousel ===== */
+.wf-carousel { position: relative; }
+.wf-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 6px;
+}
+.wf-controls { display: flex; gap: 8px; }
+.wf-prev, .wf-next {
+  width: 36px; height: 36px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--pill);
+  color: var(--fg); font-weight: 900; cursor: pointer;
+  display: grid; place-items: center;
+  box-shadow: var(--shadow);
+}
+.wf-prev:disabled, .wf-next:disabled { opacity: .45; cursor: default; }
+
+.wf-viewport {
+  position: relative;
+  overflow-x: auto; overflow-y: visible;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px;
+}
+.wf-track {
+  display: flex; gap: 16px; align-items: stretch;
+}
+.wf-card {
+  min-width: clamp(260px, 32vw, 360px);
+  scroll-snap-align: start;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.wf-card:hover { transform: translateY(-2px); }
+
+.wf-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--pill); color: var(--muted);
+  border: 1px solid var(--line); border-radius: 999px;
+  padding: 6px 10px; font-size: 12px; margin-bottom: 8px;
+}
+
+/* 양옆 페이드 */
+.wf-fade {
+  position: absolute; top: 0; bottom: 0; width: 48px; pointer-events: none;
+  z-index: 5;
+}
+.wf-fade-left {
+  left: 0;
+  background: linear-gradient(90deg, rgba(11,15,23,1), rgba(11,15,23,0));
+}
+.wf-fade-right {
+  right: 0;
+  background: linear-gradient(-90deg, rgba(11,15,23,1), rgba(11,15,23,0));
+}
+
+/* 모바일: 카드 폭 넓혀 터치 스와이프 감각 강화 */
+@media (max-width: 768px){
+  .wf-card { min-width: 82%; }
+}
+
+/* styles.css 맨 아래에 */
+.wf-card.is-link .video { cursor: pointer; }
+.wf-card.is-link iframe { pointer-events: none; }

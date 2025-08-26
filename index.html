@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>찰스의 AI 스튜디오 — 유튜브용 AI 영상 제작 교육</title>
+  <title>찰스의 AI 스튜디오 </title>
   <meta name="theme-color" content="#ef4444">
   <link rel="icon" href="favicon.ico" />
   <meta name="color-scheme" content="dark">
-<link rel="stylesheet" href="assets/styles.css">
-
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
 <body>
   <!-- 모바일 메뉴 토글 상태 -->
   <input id="menu-toggle" type="checkbox" hidden>
@@ -20,8 +20,6 @@
 
       <ul class="nav-links" aria-label="주요 메뉴">
         <li><a href="#flow">워크플로</a></li>
-        <li><a href="#modules">커리큘럼</a></li>
-        <li><a href="#samples">샘플</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
 
@@ -31,7 +29,7 @@
           <img id="userAvatar" alt="">
           <span id="userName">사용자</span>
         </div>
-        <!-- 로그인/로그아웃 버튼 (상단 네비에만 존재) -->
+        <!-- 로그인/로그아웃 버튼 -->
         <button id="loginBtn" class="btn-sm primary" type="button">로그인</button>
         <button id="logoutBtn" class="btn-sm hidden" type="button">로그아웃</button>
 
@@ -50,8 +48,6 @@
   <!-- 모바일 드롭다운 메뉴 -->
   <nav class="nav-links wrap" aria-label="모바일 메뉴">
     <a href="#flow" onclick="document.body.classList.remove('menu-open')">워크플로</a>
-    <a href="#modules" onclick="document.body.classList.remove('menu-open')">커리큘럼</a>
-    <a href="#samples" onclick="document.body.classList.remove('menu-open')">샘플</a>
     <a href="#faq" onclick="document.body.classList.remove('menu-open')">FAQ</a>
   </nav>
 
@@ -74,45 +70,71 @@
       <h1>유튜브에서 통하는 <span style="color:var(--brand)">AI 영상 제작</span> A→Z</h1>
       <p class="lead">아이디어 → 대본 → 음악/이미지 → 애니메이션 → 편집/자막 → 업로드까지.<br>실제 업로드 가능한 완성본을 목표로, 필요한 툴과 템플릿을 한 번에 잡아줍니다.</p>
       <div class="cta">
-        <a class="btn btn-primary" href="#modules">커리큘럼 보기</a>
+        <a class="btn btn-primary" href="#flow">워크플로 보기</a>
         <a class="btn btn-ghost" href="https://github.com/charlesaistudio/AI-studio" target="_blank" rel="noopener">GitHub 자료</a>
-      </div>
-      <div class="cta">
-        <span class="card" style="display:inline-flex; gap:8px; align-items:center">필요 툴: ChatGPT · Suno · Midjourney · Runway/Veo · CapCut</span>
-        <span class="card" style="display:inline-flex; gap:8px; align-items:center">출력: Shorts / 16:9 / 2.39:1</span>
       </div>
     </div>
   </header>
 
   <!-- MAIN -->
   <main class="wrap">
-    <section id="flow">
-      <h2>핵심 워크플로</h2>
-      <p class="sub">실전 예제로 배우는 3가지 프로젝트</p>
-      <div class="grid g-3">
-        <article class="card">
-          <h3>1. 캐릭터 제어 영상 만들기</h3>
-          <p class="sub">AI로 만든 캐릭터를 움직이고, 말하고, 표정까지 제어하는 법.</p>
-          <div class="video">
-            <iframe src="https://www.youtube.com/embed/sYYQxGDWxZ0" title="캐릭터 제어 예시" allowfullscreen loading="lazy"></iframe>
-          </div>
-        </article>
-        <article class="card">
-          <h3>2. 뮤직비디오 만들기</h3>
-          <p class="sub">Suno로 만든 음악에 맞춰 이미지와 클립을 이어서 뮤비로 제작.</p>
-          <div class="video">
-            <iframe src="https://www.youtube.com/embed/CQedWk7ijj4" title="뮤직비디오 예시" allowfullscreen loading="lazy"></iframe>
-          </div>
-        </article>
-        <article class="card">
-          <h3>3. 지브리풍 영상 만들기</h3>
-          <p class="sub">Midjourney + Runway/Veo로 지브리 감성 애니메이션을 구현.</p>
-          <div class="video">
-            <iframe src="https://www.youtube.com/embed/ScMzIvxBSi4" title="지브리풍 예시" allowfullscreen loading="lazy"></iframe>
-          </div>
-        </article>
-      </div>
-    </section>
+    <section id="flow" class="wf-carousel">
+  <div class="wf-head">
+    <h2>핵심 워크플로</h2>
+    <div class="wf-controls">
+      <button class="wf-prev" aria-label="이전 워크플로">
+        ‹
+      </button>
+      <button class="wf-next" aria-label="다음 워크플로">
+        ›
+      </button>
+    </div>
+  </div>
+  <p class="sub">실전 예제로 배우는 프로젝트</p>
+
+  <div class="wf-viewport" tabindex="0" aria-label="워크플로 슬라이더">
+    <div class="wf-track">
+
+      <!-- 카드 1: 전체가 링크 -->
+      <a href="workflow-1.html" class="wf-card card" style="text-decoration:none; color:inherit">
+        <div class="wf-pill">Workflow 1</div>
+        <h3>캐릭터 제어 영상 만들기</h3>
+        <p class="sub">AI로 만든 캐릭터를 움직이고, 말하고, 표정까지 제어하는 법.</p>
+        <div class="video">
+          <iframe src="https://www.youtube.com/embed/sYYQxGDWxZ0"
+            title="캐릭터 제어 예시" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </a>
+
+      <article class="wf-card card">
+        <div class="wf-pill">Workflow 2</div>
+        <h3>뮤직비디오 만들기</h3>
+        <p class="sub">Suno 음악에 맞춰 이미지/클립을 이어서 뮤비 제작.</p>
+        <div class="video">
+          <iframe src="https://www.youtube.com/embed/CQedWk7ijj4"
+            title="뮤직비디오 예시" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </article>
+
+      <article class="wf-card card">
+        <div class="wf-pill">Workflow 3</div>
+        <h3>지브리풍 영상 만들기</h3>
+        <p class="sub">Midjourney + Runway/Veo로 지브리 감성 애니메이션.</p>
+        <div class="video">
+          <iframe src="https://www.youtube.com/embed/ScMzIvxBSi4"
+            title="지브리풍 예시" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </article>
+
+      <!-- 필요하면 더 추가 가능 -->
+
+    </div>
+    <!-- 양옆 그라디언트 -->
+    <div class="wf-fade wf-fade-left" aria-hidden="true"></div>
+    <div class="wf-fade wf-fade-right" aria-hidden="true"></div>
+  </div>
+</section>
+
 
     <section id="check">
       <h2>준비물 체크리스트</h2>
@@ -145,7 +167,7 @@
     © 2025 찰스의 AI 스튜디오 · YouTube AI Video Course
   </footer>
 
- <script type="module" src="assets/app.js"></script>
-
+  <script type="module" src="assets/slider.js"></script>
+  <script type="module" src="assets/app.js"></script>
 </body>
 </html>
