@@ -13,6 +13,11 @@ body {
 :root {
   --bg:#0b0f17; --fg:#e5e7eb; --muted:#93a3b8; --line:#1f2937; --pill:#111827; --brand:#ef4444;
   --radius:16px; --shadow:0 10px 28px rgba(0,0,0,.35); --wrap: min(100% - 24px, 1080px);
+
+  /* User chip sizing */
+  --chip-h: 34px;
+  --chip-pad-x: 10px;
+  --chip-min: 140px; /* 120~180px 사이 취향대로 조정 */
 }
 a { color: inherit; text-underline-offset: .2em; }
 img, video { max-width: 100%; height: auto; }
@@ -62,52 +67,74 @@ img, video { max-width: 100%; height: auto; }
 }
 .nav-links a:hover { color: var(--fg); background: rgba(255,255,255,.04); }
 
-.right-actions { position: relative; display:flex; align-items:center; gap:10px; }
-.user-chip {
-  display:none; align-items:center; gap:8px; padding:6px 10px; border:1px solid var(--line);
-  background:var(--pill); border-radius:999px; font-size:14px; color: var(--muted);
+/* 오른쪽 액션: 유저칩 자리 항상 예약 */
+.right-actions {
+  position: relative; display:flex; align-items:center; gap:10px;
+  min-inline-size: 180px;
 }
-.user-chip img{ width:22px; height:22px; border-radius:50%; object-fit:cover; }
-.btn-sm { padding:8px 12px; border:1px solid var(--line); border-radius:10px; background:var(--pill); font-weight:800; cursor:pointer; }
+
+/* 유저칩: 고정 높이/최소폭/말줄임 */
+.user-chip{
+  display: inline-flex; align-items:center; gap:8px;
+  min-inline-size: var(--chip-min);
+  block-size: var(--chip-h);
+  padding-inline: var(--chip-pad-x);
+  border:1px solid var(--line);
+  background:var(--pill); border-radius:999px;
+  font-size:14px; color: var(--muted);
+  white-space: nowrap;
+}
+.user-chip img{
+  inline-size:22px; block-size:22px; border-radius:50%; object-fit:cover; flex:0 0 22px;
+}
+#userName{
+  display:inline-block; max-inline-size: 10ch;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; line-height:1;
+}
+
+/* 버튼 */
+.btn-sm {
+  padding:8px 12px; border:1px solid var(--line); border-radius:10px;
+  background:var(--pill); font-weight:800; cursor:pointer;
+}
 .btn-sm.primary { background: var(--brand); color:#fff; border-color:var(--brand); }
 .btn-sm:disabled{opacity:.6; cursor:not-allowed;}
-.hidden{ display:none !important; }
 
+/* 토글: display:none 대신 자리 유지 */
+.hidden{
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 햄버거 */
 .hamb { background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; }
 
 /* (옛) 드롭다운 완전 비활성화 */
 .tools-panel { display: none !important; }
 
 /* ========== Hero ========== */
-..hero {
+.hero {
   padding: clamp(28px, 7vw, 60px) 0 24px;
   background: url("assets/ceo.png") no-repeat center center;
   background-size: cover; /* 전체 꽉 채움 */
   color: #fff;            /* 사진 위에서 글씨 잘 보이도록 흰색 */
   position: relative;
 }
-
 .hero::before {
   content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.45); /* 살짝 어둡게 오버레이 → 글자 가독성 ↑ */
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.45); /* 가독성 오버레이 */
 }
-
-.hero .wrap {
-  position: relative; 
-  z-index: 1; /* 오버레이 위로 글씨 나오게 */
-}
-
-
+.hero .wrap { position: relative; z-index: 1; }
 .hero h1 { font-size: clamp(22px, 6vw, 36px); line-height: 1.2; margin: 6px 0 8px; }
 .lead { color: var(--muted); max-width: 72ch; font-size: clamp(14px, 3.6vw, 16px); }
 
-/* 모바일에서 이미지 줄이거나 옆으로 빼기 */
+/* 모바일에서 영웅 영역 튜닝 */
 @media (max-width: 768px){
   .hero {
-    background-size: auto, auto, 70vw;
-    background-position: left top, right top, 120% center; /* 오른쪽 더 밀어내기 */
+    background-size: cover;
+    background-position: center;
   }
 }
 
@@ -120,6 +147,7 @@ section h2 { font-size: clamp(18px, 4.8vw, 24px); margin: 0 0 8px; }
   padding: clamp(14px, 4.2vw, 18px); box-shadow: var(--shadow);
   transition: .15s transform, .15s box-shadow, .15s border-color;
 }
+.card:hover{ transform: translateY(-1px); }
 
 /* ========== Video (쇼츠 전용) ========== */
 .video {
@@ -253,4 +281,11 @@ section h2 { font-size: clamp(18px, 4.8vw, 24px); margin: 0 0 8px; }
   visibility: visible;
   opacity: 1;
   pointer-events: auto;
+}
+
+/* ===== 모바일에서 칩 축소(아이콘화) ===== */
+@media (max-width: 480px){
+  :root{ --chip-min: 38px; }
+  #userName{ display:none; }
+  .user-chip{ padding-inline: 8px; }
 }
