@@ -289,3 +289,5 @@ section h2 { font-size: clamp(18px, 4.8vw, 24px); margin: 0 0 8px; }
   #userName{ display:none; }
   .user-chip{ padding-inline: 8px; }
 }
+
+.hero-photo img{ display:block; max-width:480px; width:100%; height:auto; }

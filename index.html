@@ -3,15 +3,299 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>찰스의 AI 스튜디오</title>
+  <title>찰스의 AI 스튜디오 — 유튜브용 AI 영상 제작</title>
   <meta name="theme-color" content="#ef4444" />
-  <link rel="icon" href="favicon.ico" />
   <meta name="color-scheme" content="dark" />
+  <link rel="icon" href="favicon.ico" />
 
-  <!-- GitHub Pages 프로젝트 경로 고정 -->
+  <!-- 로컬 테스트용 -->
+  <base href="./">
+  <!-- 깃허브 Pages 배포용 (배포 시 위 줄 주석 처리하고 아래 주석 해제)
   <base href="https://charlesaistudio.github.io/AI-studio/">
+  -->
 
-  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    /* ========== Reset & Base ========== */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans KR", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      -webkit-tap-highlight-color: transparent;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    :root {
+      --bg:#0b0f17; --fg:#e5e7eb; --muted:#93a3b8; --line:#1f2937; --pill:#111827; --brand:#ef4444;
+      --radius:16px; --shadow:0 10px 28px rgba(0,0,0,.35); --wrap: min(100% - 24px, 1080px);
+
+      /* User chip sizing */
+      --chip-h: 34px;
+      --chip-pad-x: 10px;
+      --chip-min: 140px; /* 120~180px 사이 취향대로 조정 */
+    }
+    a { color: inherit; text-underline-offset: .2em; }
+    img, video { max-width: 100%; height: auto; }
+    :focus-visible {
+      outline: 3px solid color-mix(in oklab, var(--brand), white 20%);
+      outline-offset: 2px; border-radius: 8px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ========== Layout Helpers ========== */
+    .wrap { width: var(--wrap); margin-inline: auto; }
+    .grid { display: grid; gap: 16px; }
+    .g-3 { grid-template-columns: 1fr; }
+    .g-2 { grid-template-columns: 1fr; }
+    @media (min-width: 700px){
+      .g-2 { grid-template-columns: repeat(2, 1fr); }
+      .g-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px){
+      .g-3 { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* ========== Top Nav ========== */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(10px);
+      background: color-mix(in oklab, var(--bg) 90%, transparent);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      width: var(--wrap); margin-inline: auto; padding: 10px 14px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .logo { font-weight: 800; letter-spacing: .2px; white-space: nowrap; }
+
+    /* 상단 가로 메뉴 */
+    .nav-links {
+      list-style: none; display: flex; gap: 16px; margin: 0; padding: 0;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      text-decoration: none; font-weight: 700; color: var(--muted);
+      padding: 10px 12px; border-radius: 10px;
+    }
+    .nav-links a:hover { color: var(--fg); background: rgba(255,255,255,.04); }
+
+    /* 오른쪽 액션: 유저칩 자리 항상 예약 */
+    .right-actions {
+      position: relative; display:flex; align-items:center; gap:10px;
+      min-inline-size: 180px;
+    }
+
+    /* 유저칩: 고정 높이/최소폭/말줄임 */
+    .user-chip{
+      display: inline-flex; align-items:center; gap:8px;
+      min-inline-size: var(--chip-min);
+      block-size: var(--chip-h);
+      padding-inline: var(--chip-pad-x);
+      border:1px solid var(--line);
+      background:var(--pill); border-radius:999px;
+      font-size:14px; color: var(--muted);
+      white-space: nowrap;
+    }
+    .user-chip img{
+      inline-size:22px; block-size:22px; border-radius:50%; object-fit:cover; flex:0 0 22px;
+    }
+    #userName{
+      display:inline-block; max-inline-size: 10ch;
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap; line-height:1;
+    }
+
+    /* 버튼 */
+    .btn-sm {
+      padding:8px 12px; border:1px solid var(--line); border-radius:10px;
+      background:var(--pill); font-weight:800; cursor:pointer;
+    }
+    .btn-sm.primary { background: var(--brand); color:#fff; border-color:var(--brand); }
+    .btn-sm:disabled{opacity:.6; cursor:not-allowed;}
+
+    /* 토글: display:none 대신 자리 유지 */
+    .hidden{
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    /* 햄버거 */
+    .hamb { background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; }
+
+    /* (옛) 드롭다운 완전 비활성화 */
+    .tools-panel { display: none !important; }
+
+    /* ========== Hero (배경이미지 제거, 우측 사진만 사용) ========== */
+    .hero {
+      padding: clamp(28px, 7vw, 60px) 0 24px;
+      color: #fff;
+      position: relative;
+    }
+    .hero .wrap { position: relative; z-index: 1; }
+    .hero h1 { font-size: clamp(22px, 6vw, 36px); line-height: 1.2; margin: 6px 0 8px; }
+    .lead { color: var(--muted); max-width: 72ch; font-size: clamp(14px, 3.6vw, 16px); }
+
+    .hero-grid{ display:grid; grid-template-columns: 1.2fr 0.8fr; align-items:center; gap:24px; }
+    @media (max-width:700px){ .hero-grid{ grid-template-columns: 1fr; } }
+    .hero-photo img{ display:block; max-width:480px; width:100%; height:auto; border-radius: 12px; }
+
+    /* ========== Sections & Cards ========== */
+    section { padding: clamp(28px, 7vw, 42px) 0; }
+    section h2 { font-size: clamp(18px, 4.8vw, 24px); margin: 0 0 8px; }
+    .sub { color: var(--muted); margin: 0 0 12px; font-size: clamp(13px, 3.6vw, 15px); }
+    .card {
+      background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: clamp(14px, 4.2vw, 18px); box-shadow: var(--shadow);
+      transition: .15s transform, .15s box-shadow, .15s border-color;
+    }
+    .card:hover{ transform: translateY(-1px); }
+
+    /* ========== Video (쇼츠 전용) ========== */
+    .video {
+      position: relative; width: 100%; aspect-ratio: 9/16; border-radius: 14px; overflow: hidden;
+      background: #000; border: 1px solid var(--line); max-width: 500px; margin-inline: auto;
+    }
+    .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+    /* ========== Modal ========== */
+    .modal-backdrop{
+      position:fixed; inset:0; background:rgba(0,0,0,.6);
+      display:none; align-items:center; justify-content:center;
+      z-index: 2000;
+    }
+    .modal{
+      width:min(480px, 92vw); background:var(--pill); border:1px solid var(--line);
+      border-radius:16px; box-shadow:var(--shadow); padding:18px; position: relative;
+    }
+    .modal h3{ margin:0 0 8px; }
+    .modal p{ margin:0 0 14px; color: var(--muted); }
+    .modal .actions{ display:flex; flex-direction:column; gap:10px; }
+    .modal .close{ position:absolute; right:16px; top:12px; background:none; border:none; color: var(--muted); font-size:18px; cursor:pointer; }
+
+    /* ===== Workflow Carousel ===== */
+    .wf-carousel { position: relative; }
+    .wf-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 6px;
+    }
+    .wf-controls { display: flex; gap: 8px; }
+    .wf-prev, .wf-next {
+      width: 36px; height: 36px; border-radius: 999px;
+      border: 1px solid var(--line); background: var(--pill);
+      color: var(--fg); font-weight: 900; cursor: pointer;
+      display: grid; place-items: center;
+      box-shadow: var(--shadow);
+    }
+    .wf-prev:disabled, .wf-next:disabled { opacity: .45; cursor: default; }
+
+    .wf-viewport {
+      position: relative;
+      overflow-x: auto; overflow-y: visible;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 8px;
+    }
+    .wf-track { display: flex; gap: 16px; align-items: stretch; }
+    .wf-card {
+      min-width: clamp(260px, 32vw, 360px);
+      scroll-snap-align: start;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .wf-card:hover { transform: translateY(-2px); }
+
+    .wf-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--pill); color: var(--muted);
+      border: 1px solid var(--line); border-radius: 999px;
+      padding: 6px 10px; font-size: 12px; margin-bottom: 8px;
+    }
+
+    /* 양옆 페이드 */
+    .wf-fade {
+      position: absolute; top: 0; bottom: 0; width: 48px; pointer-events: none;
+      z-index: 5;
+    }
+    .wf-fade-left {
+      left: 0;
+      background: linear-gradient(90deg, rgba(11,15,23,1), rgba(11,15,23,0));
+    }
+    .wf-fade-right {
+      right: 0;
+      background: linear-gradient(-90deg, rgba(11,15,23,1), rgba(11,15,23,0));
+    }
+
+    /* 모바일: 카드 폭 넓혀 터치 스와이프 */
+    @media (max-width: 768px){
+      .wf-card { min-width: 82%; }
+    }
+
+    /* 링크 카드 클릭 유도 */
+    .wf-card.is-link .video { cursor: pointer; }
+    .wf-card.is-link iframe { pointer-events: none; }
+
+    /* ===== 우측 슬라이드 패널 ===== */
+    .tools-open { overflow: hidden; }
+    .tools-backdrop{
+      position: fixed; inset: 0; background: rgba(0,0,0,.55);
+      opacity: 0; pointer-events: none; transition: opacity .2s ease;
+      z-index: 1000;
+    }
+    .tools-drawer{
+      position: fixed; top: 0; right: 0; height: 100%;
+      width: min(360px, 88vw);
+      background: var(--pill); border-left: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      transform: translateX(100%) !important;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .25s ease, opacity .2s ease;
+      z-index: 1001; display: flex; flex-direction: column;
+    }
+    .tools-header{
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; border-bottom: 1px solid var(--line);
+    }
+    .tools-header h3{ margin: 0; font-size: 16px; }
+    .tools-close{
+      background: none; border: none; color: var(--muted);
+      font-size: 18px; cursor: pointer;
+    }
+    .tools-body{
+      display: flex; flex-direction: column; gap: 6px;
+      padding: 10px;
+      overflow: auto;
+    }
+    .tool-item{
+      display: flex; flex-direction: column; gap: 2px;
+      padding: 12px; border-radius: 12px; text-decoration: none;
+      color: var(--fg); border: 1px solid var(--line);
+      background: var(--bg);
+    }
+    .tool-item:hover{ background: rgba(255,255,255,.06); }
+    .tool-name{ font-weight: 800; }
+    .tool-desc{ font-size: 12px; color: var(--muted); }
+
+    .tools-open .tools-backdrop{ opacity: 1; pointer-events: auto; }
+    .tools-open .tools-drawer{
+      transform: translateX(0) !important;
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* ===== 모바일에서 칩 축소(아이콘화) ===== */
+    @media (max-width: 480px){
+      :root{ --chip-min: 38px; }
+      #userName{ display:none; }
+      .user-chip{ padding-inline: 8px; }
+    }
+  </style>
 </head>
 <body>
   <!-- NAV -->
@@ -27,7 +311,7 @@
 
       <div class="right-actions">
         <!-- 유저 칩 (로그인 시에만 표시) -->
-        <div id="userChip" class="user-chip" aria-live="polite">
+        <div id="userChip" class="user-chip hidden" aria-live="polite" style="display:none">
           <img id="userAvatar" alt="" />
           <span id="userName">사용자</span>
         </div>
@@ -57,31 +341,27 @@
   <aside id="toolsDrawer" class="tools-drawer" role="dialog" aria-modal="true" aria-label="빠른 툴 링크">
     <header class="tools-header">
       <h3>AI툴</h3>
-      <button class="tools-close" aria-label="닫기" onclick="closeTools()">✕</button>
+      <button class="tools-close" aria-label="닫기" onclick="window.__closeTools()">✕</button>
     </header>
 
     <nav class="tools-body">
-      <a class="tool-item" href="https://chat.openai.com" target="_blank" rel="noopener" onclick="closeTools()">
+      <a class="tool-item" href="https://chat.openai.com" target="_blank" rel="noopener" onclick="window.__closeTools()">
         <span class="tool-name">🤖 ChatGPT</span>
         <span class="tool-desc">대본/아이디어 생성</span>
       </a>
-
-      <a class="tool-item" href="https://www.midjourney.com/" target="_blank" rel="noopener" onclick="closeTools()">
+      <a class="tool-item" href="https://www.midjourney.com/" target="_blank" rel="noopener" onclick="window.__closeTools()">
         <span class="tool-name">🎨 Midjourney</span>
         <span class="tool-desc">이미지 생성</span>
       </a>
-
-      <a class="tool-item" href="https://suno.com" target="_blank" rel="noopener" onclick="closeTools()">
+      <a class="tool-item" href="https://suno.com" target="_blank" rel="noopener" onclick="window.__closeTools()">
         <span class="tool-name">🎵 Suno</span>
         <span class="tool-desc">음악 생성</span>
       </a>
-
-      <a class="tool-item" href="https://labs.google/fx/tools/videofx" target="_blank" rel="noopener" onclick="closeTools()">
+      <a class="tool-item" href="https://labs.google/fx/tools/videofx" target="_blank" rel="noopener" onclick="window.__closeTools()">
         <span class="tool-name">🎬 Veo 3</span>
         <span class="tool-desc">영상 생성 (Google VideoFX)</span>
       </a>
-
-      <a class="tool-item" href="https://klingai.com/" target="_blank" rel="noopener" onclick="closeTools()">
+      <a class="tool-item" href="https://klingai.com/" target="_blank" rel="noopener" onclick="window.__closeTools()">
         <span class="tool-name">🚀 Kling</span>
         <span class="tool-desc">고품질 비디오 생성</span>
       </a>
@@ -91,7 +371,7 @@
   <!-- 로그인 모달 (기본 숨김) -->
   <div id="authModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="authTitle" style="display:none">
     <div class="modal">
-      <button class="close" aria-label="닫기" onclick="toggleAuth(false)">✕</button>
+      <button class="close" aria-label="닫기" onclick="window.toggleAuth(false)">✕</button>
       <h3 id="authTitle">로그인</h3>
       <p>Google 계정으로 안전하게 로그인합니다.</p>
       <div class="actions">
@@ -102,24 +382,22 @@
   </div>
 
   <!-- HERO -->
- <header class="hero">
-  <div class="wrap hero-grid">
-    <!-- 왼쪽: 텍스트 -->
-    <div class="hero-text">
-      <h1>유튜브에서 통하는 <span style="color:var(--brand)">AI 영상 제작</span> A→Z</h1>
-      <p class="lead">
-        아이디어 → 대본 → 음악/이미지 → 애니메이션 → 편집/자막 → 업로드까지.<br>
-        실제 업로드 가능한 완성본을 목표로, 필요한 툴과 템플릿을 한 번에 잡아줍니다.
-      </p>
+  <header class="hero">
+    <div class="wrap grid g-2 hero-grid">
+      <!-- 왼쪽: 텍스트 -->
+      <div class="hero-text">
+        <h1>유튜브에서 통하는 <span style="color:var(--brand)">AI 영상 제작</span> A→Z</h1>
+        <p class="lead">
+          아이디어 → 대본 → 음악/이미지 → 애니메이션 → 편집/자막 → 업로드까지.<br>
+          실제 업로드 가능한 완성본을 목표로, 필요한 툴과 템플릿을 한 번에 잡아줍니다.
+        </p>
+      </div>
+      <!-- 오른쪽: 대표님 사진 -->
+      <div class="hero-photo">
+        <img src="assets/ceo1.png" alt="대표님" />
+      </div>
     </div>
-
-    <!-- 오른쪽: 대표님 사진 -->
-    <div class="hero-photo">
-      <img src="assets/ceo1.png" alt="대표님" />
-    </div>
-  </div>
-</header>
-
+  </header>
 
   <!-- MAIN -->
   <main class="wrap">
@@ -134,7 +412,7 @@
       <p class="sub">실전 예제로 배우는 프로젝트</p>
 
       <div class="wf-viewport" tabindex="0" aria-label="워크플로 슬라이더">
-        <div class="wf-track">
+        <div class="wf-track" id="wfTrack">
           <!-- 카드 1: 전체가 링크 (로그인 필요) -->
           <a href="workflow-1.html"
              class="wf-card card is-link"
@@ -240,64 +518,58 @@
     © 2025 찰스의 AI 스튜디오 · YouTube AI Video Course
   </footer>
 
-  <!-- 스크립트 -->
-  <script type="module" src="assets/slider.js"></script>
-  <!-- 주의: 중복 초기화 방지 위해 assets/app.js는 로드하지 않음 -->
-
-  <!-- 우측 패널 토글/닫기 -->
-  <script>
-    function toggleTools() {
-      const btn = document.querySelector('.hamb');
-      const wasOpen = document.body.classList.toggle('tools-open');
-      btn.setAttribute('aria-expanded', String(wasOpen));
-      if (wasOpen) {
-        document.getElementById('toolsDrawer')
-          .querySelector('a.tool-item')?.focus();
-      } else {
-        btn.focus();
-      }
-    }
-    function closeTools() {
-      const btn = document.querySelector('.hamb');
-      document.body.classList.remove('tools-open');
-      btn.setAttribute('aria-expanded', 'false');
-    }
-    document.getElementById('toolsBackdrop').addEventListener('click', closeTools);
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeTools(); });
-    (function () {
-      const btn = document.getElementById('toolsBtn');
-      const drawer = document.getElementById('toolsDrawer');
-      const backdrop = document.getElementById('toolsBackdrop');
-      if (!btn || !drawer || !backdrop) return;
-      function openTools() {
-        document.body.classList.add('tools-open');
-        btn.setAttribute('aria-expanded', 'true');
-        setTimeout(() => drawer.querySelector('a.tool-item')?.focus(), 0);
-      }
-      function closeTools() {
-        document.body.classList.remove('tools-open');
-        btn.setAttribute('aria-expanded', 'false');
-        btn.focus();
-      }
-      function toggleTools() {
-        if (document.body.classList.contains('tools-open')) closeTools();
-        else openTools();
-      }
-      btn.addEventListener('click', toggleTools);
-      backdrop.addEventListener('click', closeTools);
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeTools(); });
-      document.addEventListener('click', (e) => {
-        if (!document.body.classList.contains('tools-open')) return;
-        if (drawer.contains(e.target) || btn.contains(e.target)) return;
-        closeTools();
-      });
-      window.toggleTools = toggleTools;
-      window.closeTools = closeTools;
-    })();
-  </script>
-
-  <!-- Firebase + Auth Gate (단일 모듈 스크립트) -->
+  <!-- ===== JS: 우측 패널 & 워크플로 슬라이더 & Firebase Auth Gate ===== -->
   <script type="module">
+    /***** 우측 패널 토글 (중복 선언 없이 깔끔) *****/
+    const toolsBtn     = document.getElementById('toolsBtn');
+    const toolsDrawer  = document.getElementById('toolsDrawer');
+    const toolsBackdrop= document.getElementById('toolsBackdrop');
+    function __openTools(){
+      document.body.classList.add('tools-open');
+      toolsBtn?.setAttribute('aria-expanded', 'true');
+      setTimeout(()=> toolsDrawer?.querySelector('a.tool-item')?.focus(), 0);
+    }
+    function __closeTools(){
+      document.body.classList.remove('tools-open');
+      toolsBtn?.setAttribute('aria-expanded', 'false');
+      toolsBtn?.focus();
+    }
+    window.__closeTools = __closeTools;
+    toolsBtn?.addEventListener('click', ()=> {
+      if (document.body.classList.contains('tools-open')) __closeTools();
+      else __openTools();
+    });
+    toolsBackdrop?.addEventListener('click', __closeTools);
+    document.addEventListener('keydown', (e)=> { if (e.key === 'Escape') __closeTools(); });
+    document.addEventListener('click', (e)=>{
+      if (!document.body.classList.contains('tools-open')) return;
+      if (toolsDrawer.contains(e.target) || toolsBtn.contains(e.target)) return;
+      __closeTools();
+    });
+
+    /***** 워크플로 슬라이더(버튼으로 가로 스크롤) *****/
+    const viewport = document.querySelector('.wf-viewport');
+    const prevBtn  = document.querySelector('.wf-prev');
+    const nextBtn  = document.querySelector('.wf-next');
+    function updateArrows(){
+      if (!viewport) return;
+      const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+      prevBtn.disabled = viewport.scrollLeft <= 8;
+      nextBtn.disabled = viewport.scrollLeft >= (maxScroll - 8);
+    }
+    function scrollByCards(dir){
+      if (!viewport) return;
+      const card = viewport.querySelector('.wf-card');
+      const step = card ? card.clientWidth + 16 : viewport.clientWidth * 0.8;
+      viewport.scrollBy({ left: dir * step, behavior: 'smooth' });
+      setTimeout(updateArrows, 220);
+    }
+    prevBtn?.addEventListener('click', ()=> scrollByCards(-1));
+    nextBtn?.addEventListener('click', ()=> scrollByCards(1));
+    viewport?.addEventListener('scroll', updateArrows, { passive:true });
+    window.addEventListener('load', updateArrows);
+
+    /***** Firebase + Auth Gate (단일 모듈) *****/
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import {
       getAuth, GoogleAuthProvider,
