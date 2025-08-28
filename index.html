@@ -295,6 +295,33 @@
       #userName{ display:none; }
       .user-chip{ padding-inline: 8px; }
     }
+
+    /* ===== Text List (빠른 이동) ===== */
+    .list-wrap { display: grid; gap: 10px; }
+    .list-item {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 12px 14px;
+      border: 1px solid var(--line); border-radius: 12px;
+      background: var(--bg); text-decoration: none; color: var(--fg);
+      box-shadow: var(--shadow);
+      transition: background .15s ease, transform .15s ease;
+    }
+    .list-item:hover { background: rgba(255,255,255,.06); transform: translateY(-1px); }
+    .list-left { display:flex; align-items:center; gap: 12px; }
+    .badge {
+      display:inline-flex; align-items:center; justify-content:center;
+      min-width: 28px; height: 28px; padding: 0 8px;
+      border-radius: 999px; background: var(--pill); border: 1px solid var(--line);
+      font-weight: 800; font-size: 12px; color: var(--muted);
+    }
+    .list-title { font-weight: 800; }
+    .list-meta { font-size: 12px; color: var(--muted); }
+    .list-right { display:flex; align-items:center; gap:8px; color: var(--muted); }
+    .lock {
+      display:inline-flex; align-items:center; justify-content:center;
+      width: 22px; height: 22px; border-radius: 999px;
+      border: 1px solid var(--line); background: var(--pill);
+    }
   </style>
 </head>
 <body>
@@ -306,6 +333,7 @@
       <!-- 상단 가로 메뉴 -->
       <ul class="nav-links" aria-label="주요 메뉴">
         <li><a href="#flow">워크플로</a></li>
+        <li><a href="#quick-links">빠른 이동</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
 
@@ -405,6 +433,7 @@
 
   <!-- MAIN -->
   <main class="wrap">
+    <!-- 워크플로 캐러셀 -->
     <section id="flow" class="wf-carousel">
       <div class="wf-head">
         <h2>핵심 워크플로</h2>
@@ -435,27 +464,25 @@
             </div>
           </a>
 
-            <div class="wf-track" id="wfTrack">
-  <!-- 카드 2: 전체가 링크 -->
-  <a href="workflow-2.html"
-     class="wf-card card is-link"
-     data-requires-auth
-     style="text-decoration:none; color:inherit">
-    <div class="wf-pill">Workflow 2</div>
-    <h3>뮤직비디오 만들기</h3>
-    <p class="sub">Suno 음악에 맞춰 이미지/클립을 이어서 뮤비 제작.</p>
-    <div class="video">
-      <iframe
-        src="https://www.youtube.com/embed/IpaJEU2WCFw"
-        title="뮤직비디오 예시"
-        allowfullscreen
-        loading="lazy"
-      ></iframe>
-    </div>
-  </a>
-</div>
+          <!-- 카드 2: 전체가 링크 (로그인 필요) -->
+          <a href="workflow-2.html"
+             class="wf-card card is-link"
+             data-requires-auth
+             style="text-decoration:none; color:inherit">
+            <div class="wf-pill">Workflow 2</div>
+            <h3>뮤직비디오 만들기</h3>
+            <p class="sub">Suno 음악에 맞춰 이미지/클립을 이어서 뮤비 제작.</p>
+            <div class="video">
+              <iframe
+                src="https://www.youtube.com/embed/IpaJEU2WCFw"
+                title="뮤직비디오 예시"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+          </a>
 
-
+          <!-- 카드 3 -->
           <article class="wf-card card">
             <div class="wf-pill">Workflow 3</div>
             <h3>지브리풍 영상 만들기</h3>
@@ -477,6 +504,61 @@
       </div>
     </section>
 
+    <!-- ✨ 빠른 이동 텍스트 리스트 (NEW) -->
+    <section id="quick-links">
+      <h2>ai 영상 가이드</h2>
+      <p>구글 로그인 하시면 열람가능합니다.</p>
+
+      <div class="list-wrap">
+        <!-- W1 -->
+        <a href="workflow-1.html" class="list-item" data-requires-auth>
+          <div class="list-left">
+            <span class="badge">W1</span>
+            <div>
+              <div class="list-title">캐릭터 제어 영상 만들기</div>
+              <div class="list-meta">AI 캐릭터 움직임/립싱크/표정 제어</div>
+            </div>
+          </div>
+          <div class="list-right">
+            <span class="lock" title="로그인 필요" aria-hidden="true">🔒</span>
+            <span aria-hidden="true">이동 ›</span>
+          </div>
+        </a>
+
+        <!-- W2 -->
+        <a href="workflow-2.html" class="list-item" data-requires-auth>
+          <div class="list-left">
+            <span class="badge">W2</span>
+            <div>
+              <div class="list-title">뮤직비디오 만들기</div>
+              <div class="list-meta">Suno 음악 + 이미지/클립 구성</div>
+            </div>
+          </div>
+          <div class="list-right">
+            <span class="lock" title="로그인 필요" aria-hidden="true">🔒</span>
+            <span aria-hidden="true">이동 ›</span>
+          </div>
+        </a>
+
+        <!-- W3 (예: 준비중 표기) -->
+        <a href="workflow-3.html" class="list-item" data-requires-auth
+           aria-disabled="true" title="곧 공개됩니다" style="opacity:.6; pointer-events:none;">
+          <div class="list-left">
+            <span class="badge">W3</span>
+            <div>
+              <div class="list-title">지브리풍 영상 만들기</div>
+              <div class="list-meta">Midjourney + Veo 3 애니메이션 워크플로</div>
+            </div>
+          </div>
+          <div class="list-right">
+            <span class="lock" aria-hidden="true">🔒</span>
+            <span aria-hidden="true">준비중</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- 준비물 체크리스트 -->
     <section id="check">
       <h2>준비물 체크리스트</h2>
       <p class="sub">수업 시작 전에 계정과 파일만 준비하면 바로 제작 가능</p>
