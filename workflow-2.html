@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>워크플로 2 — 뮤직비디오 만들기 가이드 | 찰스의 AI 스튜디오</title>
+  <meta name="theme-color" content="#ef4444" />
+  <link rel="icon" href="favicon.ico" />
+  <meta name="color-scheme" content="dark" />
+
+  <!-- GitHub Pages 프로젝트 경로 고정 (index와 동일) -->
+  <base href="https://charlesaistudio.github.io/AI-studio/">
+
+  <!-- FOUC/우선순위 핫픽스: 드로어는 기본 숨김 (index와 동일) -->
+  <style>
+    .tools-backdrop{opacity:0;pointer-events:none}
+    .tools-drawer{
+      transform:translateX(100%)!important;visibility:hidden;opacity:0;pointer-events:none
+    }
+    .tools-open .tools-backdrop{opacity:1;pointer-events:auto}
+    .tools-open .tools-drawer{
+      transform:translateX(0)!important;visibility:visible;opacity:1;pointer-events:auto
+    }
+  </style>
+
+  <link rel="stylesheet" href="assets/styles.css?v=7" />
+  <link rel="stylesheet" href="assets/edu.css" />
+</head>
+
+<body>
+  <input id="menu-toggle" type="checkbox" hidden>
+
+  <!-- 상단 네비 -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="logo"><a href="index.html" style="text-decoration:none">찰스의 AI 스튜디오</a></div>
+
+      <!-- 상단 가로 메뉴: 메인 섹션은 index로 연결 -->
+      <ul class="nav-links" aria-label="주요 메뉴">
+        <li><a href="index.html#flow">워크플로</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+      </ul>
+
+      <div class="right-actions">
+        <!-- 유저 칩 -->
+        <div id="userChip" class="user-chip" aria-live="polite">
+          <img id="userAvatar" alt="" />
+          <span id="userName">사용자</span>
+        </div>
+
+        <!-- 로그인/로그아웃 버튼 -->
+        <button id="loginBtn" class="btn-sm primary" type="button">로그인</button>
+        <button id="logoutBtn" class="btn-sm hidden" type="button">로그아웃</button>
+
+        <!-- 햄버거: 우측 사이드 패널 토글 -->
+        <button
+          id="toolsBtn"
+          class="hamb"
+          aria-label="툴 메뉴 열기/닫기"
+          aria-expanded="false"
+          aria-controls="toolsDrawer">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M3 6h18M3 12h18M3 18h18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 우측 슬라이드 패널 (툴 링크) -->
+  <div id="toolsBackdrop" class="tools-backdrop" aria-hidden="true"></div>
+  <aside id="toolsDrawer" class="tools-drawer" role="dialog" aria-modal="true" aria-label="빠른 툴 링크">
+    <header class="tools-header">
+      <h3>AI툴</h3>
+      <button class="tools-close" aria-label="닫기" onclick="closeTools()">✕</button>
+    </header>
+
+    <nav class="tools-body">
+      <a class="tool-item" href="https://chat.openai.com" target="_blank" rel="noopener" onclick="closeTools()">
+        <span class="tool-name">🤖 ChatGPT</span>
+        <span class="tool-desc">가사/프롬프트 생성</span>
+      </a>
+      <a class="tool-item" href="https://suno.com" target="_blank" rel="noopener" onclick="closeTools()">
+        <span class="tool-name">🎵 Suno</span>
+        <span class="tool-desc">음악 생성</span>
+      </a>
+      <a class="tool-item" href="https://labs.google/fx/tools/videofx" target="_blank" rel="noopener" onclick="closeTools">
+        <span class="tool-name">🎬 Veo 3</span>
+        <span class="tool-desc">영상 생성 (Google VideoFX)</span>
+      </a>
+      <a class="tool-item" href="https://www.capcut.com/" target="_blank" rel="noopener" onclick="closeTools()">
+        <span class="tool-name">✂️ CapCut</span>
+        <span class="tool-desc">편집/자막/템플릿</span>
+      </a>
+      <a class="tool-item" href="https://www.midjourney.com/" target="_blank" rel="noopener" onclick="closeTools()">
+        <span class="tool-name">🎨 Midjourney</span>
+        <span class="tool-desc">뮤비용 스틸/아트(선택)</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- 헤더 -->
+  <header class="hero">
+    <div class="wrap">
+      <h1>🎬 뮤직비디오 만들기 가이드</h1>
+      <p class="lead">ChatGPT → Suno → ChatGPT → Veo 3 → CapCut로 완성하는 AI 뮤비 제작</p>
+      <div class="cta">
+        <a class="btn btn-ghost" href="index.html#flow">← 메인으로</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 본문 (교육 스코프 적용) -->
+  <main class="wrap edu">
+    <!-- 준비사항 -->
+    <section>
+      <h2>📋 시작하기 전 준비사항</h2>
+      <div class="grid g-2">
+        <div class="card">
+          <h3>필수 도구</h3>
+          <ul class="checklist">
+            <li>ChatGPT (가사/프롬프트 작성)</li>
+            <li>Suno 계정 (음악 생성)</li>
+            <li>Veo 3 (Google VideoFX) 접근</li>
+            <li>CapCut (웹/데스크탑/모바일)</li>
+            <li>(선택) Midjourney—컨셉 스틸/아트</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>예상 소요시간</h3>
+          <ul>
+            <li>아이데이션 & 가사: 10–20분</li>
+            <li>음악 생성(Suno): 5–15분</li>
+            <li>영상 생성(Veo 3): 10–30분</li>
+            <li>편집/자막(CapCut): 20–60분</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout warn" style="margin-top:12px">
+        <strong>TIP</strong><br>처음에는 30–45초 길이로 테스트하면 시행착오 비용이 확 줄어든다.
+      </div>
+    </section>
+
+    <!-- 단계별 가이드 -->
+    <section id="steps">
+      <h2>🔥 1단계: ChatGPT로 콘셉트/가사 프롬프트 만들기</h2>
+      <ol class="steps">
+        <li>장르/무드/주제/키워드/레퍼런스 곡을 3–5줄로 정리</li>
+        <li>ChatGPT에 <strong>“Suno용 가사+프롬프트”</strong>를 요청
+          <ul class="sub">
+            <li>예) “장르: K-pop 스타일 미드템포, 무드: 희망/성장, 키워드: 별, 도시, 새벽 버스.”</li>
+          </ul>
+        </li>
+        <li>후렴(Hook) 1–2줄은 귀에 꽂히게, 반복 가능한 문구로</li>
+      </ol>
+      <div class="card">
+        <h4>샘플 프롬프트(복사해 쓰기)</h4>
+        <pre><code>아래 조건으로 Suno v4.5에 넣을 &quot;가사&quot;와 &quot;프롬프트&quot;를 만들어줘.
+- 장르/무드: K-pop mid-tempo, 감정 기승전결
+- 주제: 새벽 도시에서 꿈을 좇는 청춘
+- 키워드: 네온, 버스, 별빛, 심장 박동
+- 레퍼런스: 감정 서사형 팝(드라마틱 빌드업)
+- 길이: 45–60초(훅 2회 반복)
+출력 형식:
+1) [Suno 가사]
+2) [Suno 프롬프트(영문)]</code></pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>🎵 2단계: Suno에서 음악 생성</h2>
+      <ol class="steps">
+        <li>Suno에 1단계에서 만든 <strong>가사/프롬프트</strong> 입력</li>
+        <li>템포/보컬 톤/믹스 감도를 2–3회 정도 미세 조정</li>
+        <li>최종 트랙을 WAV/MP3로 다운로드</li>
+      </ol>
+      <ul class="checklist" style="margin-top:10px">
+        <li>후렴 파트의 <strong>길이</strong>와 <strong>반복</strong>이 영상 타이밍을 결정</li>
+        <li>인트로 2–4초 <strong>여유 공간</strong>을 두면 편집이 쉬움</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>📝 3단계: ChatGPT로 Veo 3용 영상 프롬프트 받기</h2>
+      <div class="card">
+        <p>완성된 음악의 분위기/가사 키워드를 요약해 <strong>씬 단위</strong> 프롬프트를 요청한다.</p>
+        <pre><code>아래 음악 분위기와 가사에 맞춰 Veo 3(VideoFX)용 프롬프트를 씬 단위(5–7초 단위)로 만들어줘.
+- 톤: 영화적, 광원/카메라 무브 명시
+- 피사체: 청춘/도시/네온/버스/별빛
+- 출력: 
+1) [마스터 프롬프트(영문)]
+2) [씬별 프롬프트 타임라인: 0–7s, 7–14s ...]</code></pre>
+        <p class="sub">카메라 지시(“slow dolly in”, “handheld feel”)와 조명(“neon rim light”)을 꼭 넣자.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>🎬 4단계: Veo 3에서 영상 생성</h2>
+      <ol class="steps">
+        <li>Veo 3(VideoFX) 접속 → <strong>마스터 프롬프트</strong>로 베이스 클립 생성</li>
+        <li><strong>씬별 프롬프트</strong>로 5–7초 클립들을 추가 생성</li>
+        <li>클립 길이는 Suno 곡의 후렴/벌스 타이밍과 맞춰둔다</li>
+      </ol>
+      <div class="callout" style="margin-top:10px">
+        <strong>생성 팁</strong><br>동일 피사체/레ンズ/색온도 키워드를 유지하면 클립 간 시각적 일관성이 높아진다.
+      </div>
+    </section>
+
+    <section>
+      <h2>✂️ 5단계: CapCut으로 편집</h2>
+      <div class="grid g-2">
+        <div class="card">
+          <h3>워크플로</h3>
+          <ul class="checklist">
+            <li>오디오(Suno) → 타임라인에 먼저 배치</li>
+            <li>Veo 3 클립을 <strong>박자 맞춰 컷편집</strong></li>
+            <li>후렴 구간에 <strong>리듬 트랜지션</strong> 추가</li>
+            <li>가사 하이라이트 3–5줄만 <strong>키네틱 타이포</strong>로</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>해상도/출력</h3>
+          <ul>
+            <li>유튜브 숏츠/릴스: 1080×1920(9:16)</li>
+            <li>유튜브 일반: 1920×1080(16:9)</li>
+            <li>비트레이트: H.264 High, 15–30 Mbps 권장</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>🚀 6단계: 업로드 체크리스트</h2>
+      <div class="grid g-3">
+        <div class="card">
+          <h3>메타데이터</h3>
+          <ul>
+            <li>제목: 감정 키워드 + 콘셉트</li>
+            <li>설명: 제작 툴/워크플로 표기</li>
+            <li>해시태그: #Suno #Veo3 #AIMV #CapCut</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>썸네일</h3>
+          <ul>
+            <li>후렴의 <strong>피크 프레임</strong> 스틸</li>
+            <li>고대비 타이포 3–5단어</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>권리/주의</h3>
+          <ul>
+            <li>상업 이용 시 각 툴 정책 확인</li>
+            <li>타인 초상/브랜드 노출 주의</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 예시 영상 -->
+    <section>
+      <h2>예시 영상</h2>
+      <p class="sub">완성 결과물 레퍼런스</p>
+      <div class="video">
+        <iframe
+          src="https://www.youtube.com/embed/IpaJEU2WCFw"
+          title="뮤직비디오 예시"
+          allowfullscreen
+          loading="lazy"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap" style="padding:24px 0; color:var(--muted); border-top:1px solid var(--line);">
+    © 2025 찰스의 AI 스튜디오
+  </footer>
+
+  <script type="module" src="assets/app.js?v=2"></script>
+
+  <!-- 우측 패널 토글/닫기 (index와 동일) -->
+  <script>
+  (function () {
+    const btn = document.getElementById('toolsBtn');
+    const drawer = document.getElementById('toolsDrawer');
+    const backdrop = document.getElementById('toolsBackdrop');
+
+    if (!btn || !drawer || !backdrop) return;
+
+    function openTools() {
+      document.body.classList.add('tools-open');
+      btn.setAttribute('aria-expanded', 'true');
+      setTimeout(() => drawer.querySelector('a.tool-item')?.focus(), 0);
+    }
+    function closeTools() {
+      document.body.classList.remove('tools-open');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.focus();
+    }
+    function toggleTools() {
+      if (document.body.classList.contains('tools-open')) closeTools();
+      else openTools();
+    }
+
+    btn.addEventListener('click', toggleTools);
+    backdrop.addEventListener('click', closeTools);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeTools(); });
+    document.addEventListener('click', (e) => {
+      if (!document.body.classList.contains('tools-open')) return;
+      if (drawer.contains(e.target) || btn.contains(e.target)) return;
+      closeTools();
+    });
+
+    window.closeTools = closeTools;
+  })();
+  </script>
+</body>
+</html>
